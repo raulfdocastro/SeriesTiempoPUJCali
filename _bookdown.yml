@@ -1,5 +1,5 @@
 book_filename: "SeriesTiempo-RFCS.Rmd"
-output_dir: "Book"
+output_dir: "docs"
 language:
   ui:
     chapter_name: "Capítulo "
