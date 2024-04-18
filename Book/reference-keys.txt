@@ -1,0 +1,4 @@
+propuesta
+tipo-de-datos
+importancia-pronóstico
+fuente-de-datos
