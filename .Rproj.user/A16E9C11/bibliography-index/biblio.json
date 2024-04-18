@@ -1,31 +1,151 @@
 {
     "sources": [
         {
-            "URL": "http://yihui.name/knitr/",
+            "URL": "https://bookdown.org/yihui/bookdown/",
+            "abstract": "A guide to authoring books with R Markdown, including how to generate figures and tables, and insert cross-references, citations, HTML widgets, and Shiny apps in R Markdown. The book can be exported to HTML, PDF, and e-books (e.g. EPUB). The book style is customizable. You can easily write and preview the book in RStudio IDE or other editors, and host the book wherever you want (e.g. bookdown.org).",
+            "accessed": {
+                "date-parts": [
+                    [
+                        2024,
+                        4,
+                        18
+                    ]
+                ]
+            },
             "author": [
                 {
                     "family": "Xie",
                     "given": "Yihui"
                 }
             ],
-            "edition": "2nd",
-            "id": "xie2015",
+            "id": "xie_bookdown",
             "issued": {
                 "date-parts": [
                     [
-                        2015
+                        2024,
+                        4
                     ]
                 ]
             },
-            "note": "ISBN 978-1498716963",
-            "publisher": "Chapman; Hall/CRC",
-            "publisher-place": "Boca Raton, Florida",
-            "title": "Dynamic documents with R and knitr",
+            "title": "Bookdown: Authoring Books and Technical Documents with R Markdown",
+            "title-short": "Bookdown",
             "type": "book"
+        },
+        {
+            "URL": "http://www.ideam.gov.co/web/entidad/acerca-entidad",
+            "abstract": "El IDEAM es una institución pública de apoyo técnico y científico al Sistema Nacional Ambiental, que genera conocimiento, produce información confiable, consistente y oportuna, sobre el estado y las dinámicas de los recursos naturales y del medio ambiente, que facilite la definición y ajustes de las políticas ambientales y la toma de decisiones por parte de los sectores público, privado y la ciudadanía en general.",
+            "accessed": {
+                "date-parts": [
+                    [
+                        2024,
+                        4,
+                        18
+                    ]
+                ]
+            },
+            "author": [
+                {
+                    "literal": "IDEAM - Instituto de Hidrología, Meteorología y Estudios Ambientales"
+                }
+            ],
+            "id": "ideam_entidad",
+            "issued": {
+                "date-parts": [
+                    [
+                        2024
+                    ]
+                ]
+            },
+            "title": "Acerca de la Entidad",
+            "type": ""
+        },
+        {
+            "URL": "https://www.who.int/es/news-room/fact-sheets/detail/climate-change-and-health",
+            "abstract": "El cambio climático constituye una amenaza muy grave para la salud humana. Afecta a los entornos físicos, así como a todos los aspectos tanto de los sistemas naturales como humanos –incluidas las condiciones sociales y económicas, y el funcionamiento de los sistemas de salud. Se trata, por tanto, de un multiplicador de amenazas, que socava y podría revertir décadas de avances en el ámbito de la salud.",
+            "accessed": {
+                "date-parts": [
+                    [
+                        2024,
+                        4,
+                        18
+                    ]
+                ]
+            },
+            "author": [
+                {
+                    "literal": "OMS - Organización Mundial de la Salud"
+                }
+            ],
+            "id": "oms_cambio_climatico",
+            "issued": {
+                "date-parts": [
+                    [
+                        2021,
+                        10
+                    ]
+                ]
+            },
+            "title": "Cambio climático",
+            "type": ""
+        },
+        {
+            "URL": "https://wmo.int/es/site/dia-meteorologico-mundial-de-2024",
+            "accessed": {
+                "date-parts": [
+                    [
+                        2024,
+                        4,
+                        18
+                    ]
+                ]
+            },
+            "author": [
+                {
+                    "literal": "OMM - Organización Meteorológica Mundial"
+                }
+            ],
+            "container-title": "Organización Meteorológica Mundial",
+            "id": "omm_dia_meteorologico",
+            "issued": {
+                "date-parts": [
+                    [
+                        2024,
+                        3
+                    ]
+                ]
+            },
+            "title": "Día Meteorológico Mundial de 2024",
+            "type": ""
+        },
+        {
+            "URL": "http://dhime.ideam.gov.co/atencionciudadano/",
+            "accessed": {
+                "date-parts": [
+                    [
+                        2024,
+                        4,
+                        18
+                    ]
+                ]
+            },
+            "author": [
+                {
+                    "literal": "IDEAM - Instituto de Hidrología, Meteorología y Estudios Ambientales"
+                }
+            ],
+            "id": "ideam_dhime",
+            "issued": {
+                "date-parts": [
+                    [
+                        2021
+                    ]
+                ]
+            },
+            "title": "Banco de Datos del IDEAM - DHIME",
+            "type": ""
         }
     ],
     "project_biblios": [
-        "book.bib",
-        "packages.bib"
+        "SeriesTiempo.bib"
     ]
 }

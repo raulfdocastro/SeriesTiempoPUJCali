@@ -1,6 +1,0 @@
-book_filename: "SeriesTiempo-RFCS.Rmd"
-output_dir: "Book"
-language:
-  ui:
-    chapter_name: "Capítulo "
-delete_merged_file: true
