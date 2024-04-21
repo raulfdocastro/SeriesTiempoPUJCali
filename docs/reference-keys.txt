@@ -1,4 +1,7 @@
+fig:temp-datos
+fig:precip-datos
 propuesta
 tipo-de-datos
-importancia-pronóstico
+importancia-del-pronóstico
 fuente-de-datos
+consideraciones-finales

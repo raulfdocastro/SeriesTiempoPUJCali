@@ -143,6 +143,65 @@
             },
             "title": "Banco de Datos del IDEAM - DHIME",
             "type": ""
+        },
+        {
+            "URL": "https://www.datos.gov.co/",
+            "abstract": "Plataforma Nacional de Datos Abiertos Colombia",
+            "accessed": {
+                "date-parts": [
+                    [
+                        2024,
+                        4,
+                        20
+                    ]
+                ]
+            },
+            "author": [
+                {
+                    "literal": "MINTIC - Ministerio de Tecnologías de la Información y las Comunicaciones"
+                }
+            ],
+            "container-title": "la plataforma de datos abiertos del gobierno colombiano",
+            "id": "mintic_datos_abiertos",
+            "issued": {
+                "date-parts": [
+                    [
+                        2024
+                    ]
+                ]
+            },
+            "title": "Datos Abiertos Colombia",
+            "type": ""
+        },
+        {
+            "URL": "https://enrdados.netlify.com/post/2021-01-07-editar-un-libro-con-r/",
+            "abstract": "El mes pasado (dic-2019) me dio por zanjar uno de mis objetivos del año, o más bien de los últimos años, que había estado retrasando por pura vagancia (procrastinación para los anglofilos), y es que llevo tiempo detrás de sacar un libro que ya estaba escrito, pero faltaba editar, componerlo y mandar a imprimir los ejemplares. Se trata de una historia familiar, y gracias a este trabajo navideño he tenido - otra vez - que ponerme las pilas en cuestión de edición de documentos largos en R (tipo tesis) y el resultado ha sido muy satisfactorio.",
+            "accessed": {
+                "date-parts": [
+                    [
+                        2024,
+                        4,
+                        21
+                    ]
+                ]
+            },
+            "author": [
+                {
+                    "family": "Villalba",
+                    "given": "Fernando"
+                }
+            ],
+            "id": "villalba_libroR",
+            "issued": {
+                "date-parts": [
+                    [
+                        2021,
+                        1
+                    ]
+                ]
+            },
+            "title": "Editar un libro con R",
+            "type": ""
         }
     ],
     "project_biblios": [
