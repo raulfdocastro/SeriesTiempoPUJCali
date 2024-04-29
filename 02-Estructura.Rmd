@@ -1,0 +1,149 @@
+# Estructura de las series de tiempo
+
+
+## Variables a analizar
+
+Las variables a analizar en el proyecto son las siguientes:
+
+- Temperatura máxima diaria
+- Temperatura mínima diaria
+- Precipitación total diaria (automática)
+
+
+## Conjunto de datos
+
+Del Banco de Datos en línea DHIME [@ideam_dhime] se descargaron los *datasets* disponibles de las variables anteriores para las estaciones en el departamento del Cesar y el municipio de Valledupar con registros diarios entre los años 2018 al 2023.
+
+Para el análisis inicial se usarán las siguientes librerías:
+```{r, warning=FALSE, message=FALSE}
+# Análisis datos
+library(dplyr)
+library(readr)
+library(tidyr)
+library(stats)
+
+# Series tiempo
+library(changepoint)
+#library(fGarch)
+library(forecast)
+library(lubridate)
+library(timsac)
+library(tseries)
+library(xts)
+library(zoo)
+
+# Visualización
+library(dygraphs)
+library(ggplot2)
+library(ggfortify)
+library(quantmod)
+```
+
+Se proceden a cargar / leer los zips / datasets descargados:
+```{r, message=FALSE}
+# Datasets IDEAM
+zip_temp_max <- "data/DHIME-IDEAM_Cesar_Temperatura máxima diaria_2018-2023.zip"
+zip_temp_min <- "data/DHIME-IDEAM_Cesar_Temperatura mínima diaria_2018-2023.zip"
+zip_rain <- "data/DHIME-IDEAM_Cesar_Precipitación total diaria (automática)_2018-2023.zip"
+
+# Dataframes
+df_temp_max <- read_csv(unzip(zip_temp_max, files = "excel.csv.csv"), 
+                           col_select = c(CodigoEstacion, Fecha, Valor))
+df_temp_min <- read_csv(unzip(zip_temp_min, files = "excel.csv.csv"),
+                           col_select = c(CodigoEstacion, Fecha, Valor))
+df_rain <- read_csv(unzip(zip_rain, files = "excel.csv.csv"),
+                                col_select = c(CodigoEstacion, Fecha, Valor))
+
+# Conversión Fecha a Date
+df_temp_max$Fecha <- as.Date(df_temp_max$Fecha)
+df_temp_min$Fecha <- as.Date(df_temp_min$Fecha)
+df_rain$Fecha <- as.Date(df_rain$Fecha)
+
+# Summary
+glimpse(df_temp_max)
+str(df_temp_min)
+summary(df_rain)
+
+# Estaciones
+unique(df_temp_max$CodigoEstacion)
+unique(df_temp_min$CodigoEstacion)
+unique(df_rain$CodigoEstacion)
+```
+
+Se pasan las estaciones y sus datos a columnas:
+```{r}
+# Pivot df por estación
+df_temp_max_pivot <- df_temp_max %>%
+  pivot_wider(names_from = CodigoEstacion, values_from = Valor, names_prefix = "Est_")
+df_temp_min_pivot <- df_temp_min %>%
+  pivot_wider(names_from = CodigoEstacion, values_from = Valor, names_prefix = "Est_")
+df_rain_pivot <- df_rain %>%
+  pivot_wider(names_from = CodigoEstacion, values_from = Valor, names_prefix = "Est_")
+
+# Encabezado datos
+head(df_temp_max_pivot)
+head(df_temp_min_pivot)
+head(df_rain_pivot)
+```
+
+Se evidencian días faltantes en los *dataframes* por lo que se verifican y completan de ser necesario:
+```{r}
+# df días completos 2018-2023
+dias_2018_2023 <- data.frame(Fecha = seq.Date(from = as.Date("2018-01-01"), 
+                                                to = as.Date("2023-12-31"), 
+                                                by = "day"))
+
+# Join días completos
+df_temp_max_na <- left_join(dias_2018_2023, df_temp_max_pivot, by = "Fecha")
+df_temp_min_na <- left_join(dias_2018_2023, df_temp_min_pivot, by = "Fecha")
+df_rain_na <- left_join(dias_2018_2023, df_rain_pivot, by = "Fecha")
+
+# Encabezado datos
+head(df_temp_max_na)
+head(df_temp_min_na)
+head(df_rain_na)
+```
+
+Se crean las series de tiempo:
+```{r}
+# Creación series de tiempo con xts (adecuada para datos diarios con años bisiestos, ts es una frecuencia fija)
+df_temp_max_ts = xts(df_temp_max_na[,-1], order.by = df_temp_max_na$Fecha)
+df_temp_min_ts = xts(df_temp_min_na[,-1], order.by = df_temp_min_na$Fecha)
+df_rain_ts = xts(df_rain_na[,-1], order.by = df_rain_na$Fecha)
+
+# Dataframes xts
+head(df_temp_max_ts)
+class(df_temp_max_ts)
+head(df_temp_min_ts)
+class(df_temp_min_ts)
+head(df_rain_ts)
+class(df_rain_ts)
+
+# Gráficas series de tiempo
+# plot(df_temp_max_ts, main="Temperatura máxima")
+dygraph(df_temp_max_ts, main="Temperatura máxima")  %>%
+  dyAxis("x", label = "Fecha") %>%
+  dyAxis("y", label = "Temperatura (°C)")
+
+# chart_Series(df_temp_min_ts, main="Temperatura mínima")
+dygraph(df_temp_min_ts, main="Temperatura mínima") %>%
+  dyAxis("x", label = "Fecha") %>%
+  dyAxis("y", label = "Temperatura (°C)")
+
+# autoplot(df_rain_ts, main="Precipitación acumulada")
+dygraph(df_rain_ts, main="Precipitación acumulada") %>%
+  dyAxis("x", label = "Fecha") %>%
+  dyAxis("y", label = "Precipitación (mm)")
+```
+
+
+## Datos faltantes
+
+Como se puede apreciar en las gráficas anteriores, se presentan vacíos en las series; por lo que se procede a cuantificar los datos faltantes (NA) por cada estación y variable.
+```{r}
+# Suma NA
+colSums(is.na(df_temp_max_ts))
+colSums(is.na(df_temp_min_ts))
+colSums(is.na(df_rain_ts))
+```
+
