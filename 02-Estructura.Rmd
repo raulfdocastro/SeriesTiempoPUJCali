@@ -1,18 +1,24 @@
 # Estructura de las series de tiempo
 
+En el presente capítulo se revisa la estructura de las series de tiempo por medio de un análisis exploratorio de los datos.
 
 ## Variables a analizar
 
 Las variables a analizar en el proyecto son las siguientes:
 
 - Temperatura máxima diaria
-- Temperatura mínima diaria
 - Precipitación total diaria (automática)
 
 
 ## Conjunto de datos
 
-Del Banco de Datos en línea DHIME [@ideam_dhime] se descargaron los *datasets* disponibles de las variables anteriores para las estaciones en el departamento del Cesar y el municipio de Valledupar con registros diarios entre los años 2018 al 2023.
+Del Banco de Datos en línea DHIME [@ideam_dhime] se descargaron los *datasets* disponibles de las variables anteriores para estaciones en las ciudades de Bogotá, Medellín y Valledupar con registros diarios entre los años 2018 al 2023. Las estaciones IDEAM seleccionadas para el estudio son las siguientes:
+
+- Bogotá / BOG: UNIVERSIDAD NACIONAL [21205012]
+- Medellín / MED: AEROPUERTO OLAYA HERRERA - AUT [27015330] 
+- Valledupar / VUP: AEROPUERTO ALFONSO LOPEZ - [28025502]
+
+Las estaciones en mención se escogieron por contar con la mayor cantidad de datos en el periodo seleccionado para el estudio.
 
 Para el análisis inicial se usarán las siguientes librerías:
 ```{r, warning=FALSE, message=FALSE}
@@ -27,6 +33,7 @@ library(changepoint)
 #library(fGarch)
 library(forecast)
 library(lubridate)
+library(plotly)
 library(timsac)
 library(tseries)
 library(xts)
@@ -34,6 +41,7 @@ library(zoo)
 
 # Visualización
 library(dygraphs)
+# library(kableExtra)
 library(ggplot2)
 library(ggfortify)
 library(quantmod)
@@ -42,31 +50,25 @@ library(quantmod)
 Se proceden a cargar / leer los zips / datasets descargados:
 ```{r, message=FALSE}
 # Datasets IDEAM
-zip_temp_max <- "data/DHIME-IDEAM_Cesar_Temperatura máxima diaria_2018-2023.zip"
-zip_temp_min <- "data/DHIME-IDEAM_Cesar_Temperatura mínima diaria_2018-2023.zip"
-zip_rain <- "data/DHIME-IDEAM_Cesar_Precipitación total diaria (automática)_2018-2023.zip"
+zip_temp_max <- "data/DHIME-IDEAM_Temperatura máxima diaria_2018-2023.zip"
+zip_rain <- "data/DHIME-IDEAM_Precipitación total diaria (automática)_2018-2023.zip"
 
 # Dataframes
 df_temp_max <- read_csv(unzip(zip_temp_max, files = "excel.csv.csv"), 
-                           col_select = c(CodigoEstacion, Fecha, Valor))
-df_temp_min <- read_csv(unzip(zip_temp_min, files = "excel.csv.csv"),
                            col_select = c(CodigoEstacion, Fecha, Valor))
 df_rain <- read_csv(unzip(zip_rain, files = "excel.csv.csv"),
                                 col_select = c(CodigoEstacion, Fecha, Valor))
 
 # Conversión Fecha a Date
 df_temp_max$Fecha <- as.Date(df_temp_max$Fecha)
-df_temp_min$Fecha <- as.Date(df_temp_min$Fecha)
 df_rain$Fecha <- as.Date(df_rain$Fecha)
 
-# Summary
+# Descripción de los datos
 glimpse(df_temp_max)
-str(df_temp_min)
-summary(df_rain)
+str(df_temp_max)
 
 # Estaciones
 unique(df_temp_max$CodigoEstacion)
-unique(df_temp_min$CodigoEstacion)
 unique(df_rain$CodigoEstacion)
 ```
 
@@ -75,18 +77,18 @@ Se pasan las estaciones y sus datos a columnas:
 # Pivot df por estación
 df_temp_max_pivot <- df_temp_max %>%
   pivot_wider(names_from = CodigoEstacion, values_from = Valor, names_prefix = "Est_")
-df_temp_min_pivot <- df_temp_min %>%
-  pivot_wider(names_from = CodigoEstacion, values_from = Valor, names_prefix = "Est_")
 df_rain_pivot <- df_rain %>%
   pivot_wider(names_from = CodigoEstacion, values_from = Valor, names_prefix = "Est_")
 
 # Encabezado datos
 head(df_temp_max_pivot)
-head(df_temp_min_pivot)
 head(df_rain_pivot)
 ```
 
-Se evidencian días faltantes en los *dataframes* por lo que se verifican y completan de ser necesario:
+
+## Series de tiempo
+
+Se verifican que los registros tengan todos los días del periodo seleccionado en los *dataframes* y completan con un join para todo el periodo de ser necesario:
 ```{r}
 # df días completos 2018-2023
 dias_2018_2023 <- data.frame(Fecha = seq.Date(from = as.Date("2018-01-01"), 
@@ -95,55 +97,248 @@ dias_2018_2023 <- data.frame(Fecha = seq.Date(from = as.Date("2018-01-01"),
 
 # Join días completos
 df_temp_max_na <- left_join(dias_2018_2023, df_temp_max_pivot, by = "Fecha")
-df_temp_min_na <- left_join(dias_2018_2023, df_temp_min_pivot, by = "Fecha")
 df_rain_na <- left_join(dias_2018_2023, df_rain_pivot, by = "Fecha")
 
-# Encabezado datos
-head(df_temp_max_na)
-head(df_temp_min_na)
-head(df_rain_na)
 ```
 
-Se crean las series de tiempo:
+Como se cuentan con años bisiestos, se crean las series de tiempo con `xts`:
 ```{r}
-# Creación series de tiempo con xts (adecuada para datos diarios con años bisiestos, ts es una frecuencia fija)
+# Creación series de tiempo con xts (más adecuada para datos diarios con años bisiestos / frecuencias variables que ts)
 df_temp_max_ts = xts(df_temp_max_na[,-1], order.by = df_temp_max_na$Fecha)
-df_temp_min_ts = xts(df_temp_min_na[,-1], order.by = df_temp_min_na$Fecha)
 df_rain_ts = xts(df_rain_na[,-1], order.by = df_rain_na$Fecha)
 
 # Dataframes xts
 head(df_temp_max_ts)
 class(df_temp_max_ts)
-head(df_temp_min_ts)
-class(df_temp_min_ts)
 head(df_rain_ts)
 class(df_rain_ts)
+```
+
+Se realizan gráficas iniciales con `autoplot` y `dygraph` de las series de tiempo creadas:
+
+```{r}
+# Se cambian y ordenan nombres de estaciones por ciudades para mejor asociación / entendimiento
+colnames(df_temp_max_ts) <- c("MED", "BOG", "VUP")
+df_temp_max_ts <- df_temp_max_ts[, sort(names(df_temp_max_ts))]
+colnames(df_rain_ts) <- c("MED", "BOG", "VUP")
+df_rain_ts <- df_rain_ts[, sort(names(df_rain_ts))]
 
 # Gráficas series de tiempo
-# plot(df_temp_max_ts, main="Temperatura máxima")
+autoplot(df_temp_max_ts, main="Temperatura máxima")
 dygraph(df_temp_max_ts, main="Temperatura máxima")  %>%
   dyAxis("x", label = "Fecha") %>%
   dyAxis("y", label = "Temperatura (°C)")
+```
 
-# chart_Series(df_temp_min_ts, main="Temperatura mínima")
-dygraph(df_temp_min_ts, main="Temperatura mínima") %>%
-  dyAxis("x", label = "Fecha") %>%
-  dyAxis("y", label = "Temperatura (°C)")
+Se puede apreciar claramente en las gráficas anteriores que no se cuentan con datos de temperatura en diferentes periodos para las tres estaciones, especialmente en los años 2020 y 2021 (pandemia).
 
-# autoplot(df_rain_ts, main="Precipitación acumulada")
+```{r}
+# Series de tiempo precipitación
+autoplot(df_rain_ts, main="Precipitación acumulada")
 dygraph(df_rain_ts, main="Precipitación acumulada") %>%
   dyAxis("x", label = "Fecha") %>%
   dyAxis("y", label = "Precipitación (mm)")
 ```
 
+Se puede observar también que los registros de precipitación no tienen vacíos en pandemia, aunque en Valledupar (estación 28025502) se evidencian registros muy altos en marzo 2022 (mayores a 700 mm de lluvia)
 
 ## Datos faltantes
 
-Como se puede apreciar en las gráficas anteriores, se presentan vacíos en las series; por lo que se procede a cuantificar los datos faltantes (NA) por cada estación y variable.
+Como se puede apreciar en las gráficas anteriores, se presentan vacíos en las series; por lo que se procede a cuantificar los datos faltantes (NA) por cada estación / ciudad y variable.
 ```{r}
 # Suma NA
 colSums(is.na(df_temp_max_ts))
-colSums(is.na(df_temp_min_ts))
 colSums(is.na(df_rain_ts))
 ```
 
+Tal como se había observado gráficamente, las series de tiempo cuentan con datos faltantes / vacíos, lo cual es notorio al especialmente para la temperatura máxima diaria en Bogotá y Valledupar.
+
+## Análisis exploratorio
+
+Se inicia el análisis exploratorio obteniendo realizando un resumen estadístico con `summary` para cada una de las variables y ciudades estudiadas.
+
+```{r}
+# Summary
+summary(df_temp_max_ts)
+summary(df_rain_ts)
+```
+
+Se confirma con `summary` la cantidad de NA's estimados anteriormente, mientras que las temperaturas mínimas y medias corresponden al tipo de ciudad estudiada (Bogotá fría, Medellín templada y Valledupar caliente). La precipitación total diaria promedio es menor en Bogotá, seguida por Medellín y se cuadriplica en Valledupar (es necesario analizar los validez / atipicidad de los altos registros de marzo 2022 que pueden afectan la media obtenida para dicha ciudad).
+
+### Boxplots
+
+Una forma gráfica de apreciar el rango de las variables analizadas se puedo lograr realizando diagramas de cajas con `boxplot`:
+```{r}
+# Boxplots temperatura
+boxplot(df_temp_max_ts, 
+        col=c("lightblue", "lightgreen", "orange"), 
+        bg = "aliceblue",
+        main="Temperatura máxima diaria", 
+        ylab="Temperatura [°C]", xlab="Ciudad")
+```
+
+Lo anterior confirma nuevamente el comportamiento de temperaturas de las ciudades acorde a su zona climática.
+
+```{r}
+# Boxplots lluvia
+boxplot(df_rain_ts, 
+        col=c("lightblue", "lightgreen", "orange"), 
+        bg = "aliceblue",
+        main="Precipitación total diaria", 
+        ylab="Lluvia [mm]", xlab="Ciudad")
+```
+
+Aunque la mayoría de los registros de precipitación normalmente son ceros (días sin lluvia), en el diagrama de cajas anterior, se observa que la estación en Valledupar es la que más cuenta con datos por fuera del rango intercuartílico.
+
+### Histogramas
+A continuación de se generan histogramas para la temperatura máxima y la precipitación total diaria con `ggplot`:
+
+```{r}
+# Se convierte xts en df y se hace pivot para ggplot
+df_temp_max_ts_pivot<- as.data.frame(df_temp_max_ts)
+df_temp_max_ts_pivot <- pivot_longer(df_temp_max_ts_pivot, 
+                                           cols = c(BOG, MED, VUP), 
+                                           names_to = "Ciudad", 
+                                           values_to = "Temperatura")
+
+# Histogramas temperatura
+city_colors = c("BOG" = "lightblue", "MED" = "lightgreen", "VUP"= "orange")
+                
+ggplot(df_temp_max_ts_pivot, aes(x = Temperatura, fill = Ciudad)) +
+  geom_histogram(binwidth = 1, position = "dodge") +
+  scale_fill_manual(values = city_colors) +
+  labs(title = "Histograma de temperaturas máximas diarias por ciudad",
+       x = "Temperatura",
+       y = "Frecuencia",
+       fill = "Ciudad") +
+  theme_minimal()
+```
+
+A pesar de los alta cantidad de registros NA, los histogramas de temperatura corresponden a lo esperado, encontrando las temperaturas máximas de Bogotá entre los 14 y 25 grados Celsius,  los de Medellín entre 20 y 34 °C y Valledupar entre 28 y 40 °C, notándose que la mayor frecuencia de registros en cerca de 20, 28 y 35 °C respectivamente.
+
+```{r}
+# Dataframes lluvia pivot
+df_rain_ts_pivot<- as.data.frame(df_rain_ts)
+df_rain_ts_pivot <- pivot_longer(df_rain_ts_pivot, 
+                                           cols = c(BOG, MED, VUP), 
+                                           names_to = "Ciudad", 
+                                           values_to = "Lluvia")
+
+
+# Histograma lluvia
+ggplot(df_rain_ts_pivot, aes(x = Lluvia, fill = Ciudad)) +
+  geom_histogram(binwidth = 20, position = "dodge") +
+  scale_fill_manual(values = city_colors) +
+  labs(title = "Histograma de precipitaciones totales diarias por ciudad",
+       x = "Lluvia",
+       y = "Frecuencia",
+       fill = "Ciudad") +
+  theme_minimal()
+
+```
+
+Como se puede observar en el histograma anterior, en el caso de la precipitación como era de esperar, la mayor frecuencia / conteo de registros se encuentra entre 0-20 mm de lluvia.
+
+### Análisis por años
+
+Para entender y explorar aun más los datos, se obtienen los estadísticos descriptivos esta vez para cada año para cada una de las variables en el estudio.
+
+```{r}
+# Dataframe años temperatura
+df_temp_max_ts_year <- df_temp_max_ts
+df_temp_max_ts_year$year <- year(index(df_temp_max_ts_year))
+df_temp_max_ts_year <- as.data.frame(df_temp_max_ts_year)
+
+# Dataframe años lluvia
+df_rain_ts_year <- df_rain_ts
+df_rain_ts_year$year <- year(index(df_rain_ts_year))
+df_rain_ts_year <- as.data.frame(df_rain_ts_year)
+```
+
+Primero se aplica `summarise` para el dataframe de temperatura para cada año:
+```{r, warning=FALSE}
+df_temp_max_ts_year %>%
+  group_by(year) %>%
+  summarise(
+    Min_BOG = min(BOG, na.rm = TRUE),
+    Avg_BOG = mean(BOG, na.rm = TRUE),
+    Med_BOG = median(BOG, na.rm = TRUE),
+    Max_BOG = max(BOG, na.rm = TRUE),
+    
+    Min_MED = min(MED, na.rm = TRUE),
+    Avg_MED = mean(MED, na.rm = TRUE),
+    Med_MED = median(MED, na.rm = TRUE),
+    Max_MED = max(MED, na.rm = TRUE),
+    
+    Min_VUP = min(VUP, na.rm = TRUE),
+    Avg_VUP = mean(VUP, na.rm = TRUE),
+    Med_VUP = median(VUP, na.rm = TRUE),
+    Max_VUP = max(VUP, na.rm = TRUE),
+    )
+# %>%
+#   kable() %>%
+#   kable_styling(full_width = FALSE)
+```
+
+
+
+```{r, warning=FALSE}
+df_rain_ts_year %>%
+  group_by(year) %>%
+  summarise(
+    Min_BOG = min(BOG, na.rm = TRUE),
+    Avg_BOG = mean(BOG, na.rm = TRUE),
+    Max_BOG = max(BOG, na.rm = TRUE),
+    Sum_BOG = sum(BOG, na.rm = TRUE),
+    
+    Min_MED = min(MED, na.rm = TRUE),
+    Avg_MED = mean(MED, na.rm = TRUE),
+    Max_MED = max(MED, na.rm = TRUE),
+    Sum_MED = sum(MED, na.rm = TRUE),
+    
+    Min_VUP = min(VUP, na.rm = TRUE),
+    Avg_VUP = mean(VUP, na.rm = TRUE),
+    Max_VUP = max(VUP, na.rm = TRUE),
+    Sum_VUP = sum(VUP, na.rm = TRUE)
+    )
+```
+
+Lo anterior, se puede apreciar mejor al realizar visualmente el análisis por años por medio de diagramas de caja / boxplots:
+```{r, warning=FALSE}
+# Pivot df year para ggplot
+df_temp_max_ts_year_pivot <- pivot_longer(df_temp_max_ts_year, cols = c(BOG, MED, VUP), names_to = "Ciudad", values_to = "Temperatura")
+
+# Boxplots temperatura por ciudad y año
+ggplot(df_temp_max_ts_year_pivot, aes(x = factor(year), y = Temperatura, fill = Ciudad)) +
+  geom_boxplot() +
+  facet_wrap(~ Ciudad, scales = "free") +
+  scale_fill_manual(values = city_colors) +
+  labs(title = "Diagrama de cajas de temperaturas máximas por ciudad y año",
+       x = "Año",
+       y = "Temperatura [°C]") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+Como se había evidenciado anteriormente, se presentan años completos sin registros: 2019-2021 en Bogotá, 2020 en Medellín y 2021-2022 en Valledupar. 
+
+```{r, warning=FALSE}
+# Pivot df year lluvia
+df_rain_ts_year_pivot <- pivot_longer(df_rain_ts_year, cols = c(BOG, MED, VUP), names_to = "Ciudad", values_to = "Lluvia")
+
+# Boxplots lluvia por ciudad y año
+ggplot(df_rain_ts_year_pivot, aes(x = factor(year), y = Lluvia, fill = Ciudad)) +
+  geom_boxplot() +
+  facet_wrap(~ Ciudad, scales = "free") +
+  scale_fill_manual(values = city_colors) +
+  labs(title = "Diagrama de cajas de precipitaciones por ciudad y año",
+       x = "Año",
+       y = "Lluvia [mm]") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+```
+
+De los diagramas de cajas de precipitación anteriores, se puede observar que el año con mayores registros (milímetros de lluvia diaria) se encuentran en el año 2022 para Bogotá y Valledupar y el 2018 para Medellín (seguido por el 2022). En Valledupar se logra identificar que el año 2022 presenta 4 registros mayores a 600 mm, lo cual no ocurre en ningún otro año en dicha estación (ni en las otras ciudades), por lo tanto es posible que se deban descartar dichos datos en análisis o predicciones futuras de la serie de tiempo.
+
+## Observaciones finales
+El presente capítulo presenta el análisis exploratorio de las series de tiempo de la temperatura máxima y la precipitación total diaria para tres ciudades capitales de Colombia (Bogotá, Medellín y Valledupar), cada una perteneciente a una zona climática diferente. Es claro en el estudio que las series presentan años completos sin datos (especialmente en la pandemia Covid-19) por lo que será necesario contemplar dichos faltantes en análisis futuros.

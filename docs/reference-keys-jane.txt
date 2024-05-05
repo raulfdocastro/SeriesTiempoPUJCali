@@ -5,13 +5,11 @@ tipo-de-datos
 importancia-del-pronóstico
 fuente-de-datos
 consideraciones-finales
+estructura-de-los-datos-en-series-de-tiempo
+variables
+cargue-de-datos
 estructura-de-las-series-de-tiempo
 variables-a-analizar
 conjunto-de-datos
-series-de-tiempo
+función-adf
 datos-faltantes
-análisis-exploratorio
-boxplots
-histogramas
-análisis-por-años
-observaciones-finales
