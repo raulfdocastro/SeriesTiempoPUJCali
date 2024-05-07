@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 3 Preprocesamiento y visualización | Universidad Javeriana Cali Maestría en Ciencia de Datos</title>
+  <meta name="description" content="Libro en Bookdown para la asignatura Análisis de Series de Tiempo - 20241 - B" />
+  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 3 Preprocesamiento y visualización | Universidad Javeriana Cali Maestría en Ciencia de Datos" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Libro en Bookdown para la asignatura Análisis de Series de Tiempo - 20241 - B" />
+  <meta name="github-repo" content="raulfdocastro/SeriesTiempoPUJCali" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 3 Preprocesamiento y visualización | Universidad Javeriana Cali Maestría en Ciencia de Datos" />
+  
+  <meta name="twitter:description" content="Libro en Bookdown para la asignatura Análisis de Series de Tiempo - 20241 - B" />
+  
+
+<meta name="author" content="Joan Sebastián García Villa" />
+<meta name="author" content="Laura Yohanna Bermúdez Murillo" />
+<meta name="author" content="Raúl Fernando Castro Suárez" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="estructura-de-las-series-de-tiempo.html"/>
+<link rel="next" href="referencias.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/dygraphs-1.1.1/dygraph.css" rel="stylesheet" />
+<script src="libs/dygraphs-1.1.1/dygraph-combined.js"></script>
+<script src="libs/dygraphs-1.1.1/shapes.js"></script>
+<script src="libs/moment-2.8.4/moment.js"></script>
+<script src="libs/moment-timezone-0.2.5/moment-timezone-with-data.js"></script>
+<script src="libs/moment-fquarter-1.0.0/moment-fquarter.min.js"></script>
+<script src="libs/dygraphs-binding-1.1.1.6/dygraphs.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="propuesta.html"><a href="propuesta.html"><i class="fa fa-check"></i><b>1</b> Propuesta Bookdown Grupo 7</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="propuesta.html"><a href="propuesta.html#tipo-de-datos"><i class="fa fa-check"></i><b>1.1</b> Tipo de datos</a></li>
+<li class="chapter" data-level="1.2" data-path="propuesta.html"><a href="propuesta.html#importancia-del-pronóstico"><i class="fa fa-check"></i><b>1.2</b> Importancia del pronóstico</a></li>
+<li class="chapter" data-level="1.3" data-path="propuesta.html"><a href="propuesta.html#fuente-de-datos"><i class="fa fa-check"></i><b>1.3</b> Fuente de datos</a></li>
+<li class="chapter" data-level="1.4" data-path="propuesta.html"><a href="propuesta.html#consideraciones-finales"><i class="fa fa-check"></i><b>1.4</b> Consideraciones finales</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html"><i class="fa fa-check"></i><b>2</b> Estructura de las series de tiempo</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#variables-a-analizar"><i class="fa fa-check"></i><b>2.1</b> Variables a analizar</a></li>
+<li class="chapter" data-level="2.2" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#conjunto-de-datos"><i class="fa fa-check"></i><b>2.2</b> Conjunto de datos</a></li>
+<li class="chapter" data-level="2.3" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#series-tiempo"><i class="fa fa-check"></i><b>2.3</b> Series de tiempo</a></li>
+<li class="chapter" data-level="2.4" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#datos-faltantes"><i class="fa fa-check"></i><b>2.4</b> Datos faltantes</a></li>
+<li class="chapter" data-level="2.5" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#EDA"><i class="fa fa-check"></i><b>2.5</b> Análisis exploratorio</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#boxplots"><i class="fa fa-check"></i><b>2.5.1</b> Boxplots</a></li>
+<li class="chapter" data-level="2.5.2" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#histogramas"><i class="fa fa-check"></i><b>2.5.2</b> Histogramas</a></li>
+<li class="chapter" data-level="2.5.3" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#análisis-por-años"><i class="fa fa-check"></i><b>2.5.3</b> Análisis por años</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#observaciones-finales"><i class="fa fa-check"></i><b>2.6</b> Observaciones finales</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html"><i class="fa fa-check"></i><b>3</b> Preprocesamiento y visualización</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#medias-móviles"><i class="fa fa-check"></i><b>3.1</b> Medias móviles</a></li>
+<li class="chapter" data-level="3.2" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#descomposición"><i class="fa fa-check"></i><b>3.2</b> Descomposición</a></li>
+<li class="chapter" data-level="3.3" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#dickey-fuller-test"><i class="fa fa-check"></i><b>3.3</b> Dickey-Fuller Test</a></li>
+<li class="chapter" data-level="3.4" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#funciones-de-autocorrelación-acf-y-pacf"><i class="fa fa-check"></i><b>3.4</b> Funciones de autocorrelación (ACF y PACF)</a></li>
+<li class="chapter" data-level="3.5" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#rezagos"><i class="fa fa-check"></i><b>3.5</b> Rezagos</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Universidad Javeriana Cali<br />
+Maestría en Ciencia de Datos</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="preprocesamiento-y-visualización" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Capítulo 3</span> Preprocesamiento y visualización<a href="preprocesamiento-y-visualización.html#preprocesamiento-y-visualización" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Parte de las visualizaciones para el conjunto de datos analizados se desarrollaron en el capítulo 02 al crear las series de tiempo (<a href="estructura-de-las-series-de-tiempo.html#series-tiempo">2.3</a>) y especialmente en el análisis exploratorio de datos / EDA (<a href="estructura-de-las-series-de-tiempo.html#EDA">2.5</a>), por lo que para este capítulo se presentan las medias móviles, la descomposición de las series y los rezagos.</p>
+<p>Con el <a href="estructura-de-las-series-de-tiempo.html#conjunto-de-datos">Conjunto de datos</a> cargados y procesados en el capítulo 2, se procede con los análisis adicionales del presente capítulo.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="preprocesamiento-y-visualización.html#cb51-1" tabindex="-1"></a><span class="co"># xts temperatura</span></span>
+<span id="cb51-2"><a href="preprocesamiento-y-visualización.html#cb51-2" tabindex="-1"></a><span class="fu">head</span>(df_temp_max_ts)</span></code></pre></div>
+<pre><code>##            BOG  MED  VUP
+## 2018-01-01  NA 26.3 34.2
+## 2018-01-02  NA 25.6 32.3
+## 2018-01-03  NA 28.7 33.5
+## 2018-01-04  NA 27.4 33.4
+## 2018-01-05  NA 25.8 32.8
+## 2018-01-06  NA 28.0 34.2</code></pre>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="preprocesamiento-y-visualización.html#cb53-1" tabindex="-1"></a><span class="co"># xts precipitación</span></span>
+<span id="cb53-2"><a href="preprocesamiento-y-visualización.html#cb53-2" tabindex="-1"></a><span class="fu">head</span>(df_rain_ts)</span></code></pre></div>
+<pre><code>##             BOG    MED   VUP
+## 2018-01-01 13.8  0.012  0.00
+## 2018-01-02  0.1 26.304 27.97
+## 2018-01-03  2.2  4.774  1.15
+## 2018-01-04  0.0  7.233  0.00
+## 2018-01-05 17.1  3.169 13.21
+## 2018-01-06  0.3  4.862  0.01</code></pre>
+<div id="medias-móviles" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Medias móviles<a href="preprocesamiento-y-visualización.html#medias-móviles" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Se inicia graficando las medias móviles semanales y mensuales para las series de temperatura para las tres ciudades analizadas en el estudio:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="preprocesamiento-y-visualización.html#cb55-1" tabindex="-1"></a><span class="co"># Serie original</span></span>
+<span id="cb55-2"><a href="preprocesamiento-y-visualización.html#cb55-2" tabindex="-1"></a><span class="fu">plot</span>(df_temp_max_ts, </span>
+<span id="cb55-3"><a href="preprocesamiento-y-visualización.html#cb55-3" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&#39;Temperatura máxima diaria&#39;</span>, </span>
+<span id="cb55-4"><a href="preprocesamiento-y-visualización.html#cb55-4" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&#39;Fecha&#39;</span>, <span class="at">ylab=</span><span class="st">&#39;Temperatura [°C]&#39;</span>, </span>
+<span id="cb55-5"><a href="preprocesamiento-y-visualización.html#cb55-5" tabindex="-1"></a>     <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;lightblue&quot;</span>, <span class="st">&quot;lightgreen&quot;</span>, <span class="st">&quot;orange&quot;</span>))</span>
+<span id="cb55-6"><a href="preprocesamiento-y-visualización.html#cb55-6" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;right&quot;</span>, ,</span>
+<span id="cb55-7"><a href="preprocesamiento-y-visualización.html#cb55-7" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;lightblue&quot;</span>, <span class="st">&quot;lightgreen&quot;</span>, <span class="st">&quot;orange&quot;</span>),</span>
+<span id="cb55-8"><a href="preprocesamiento-y-visualización.html#cb55-8" tabindex="-1"></a>       <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="dv">1</span>,</span>
+<span id="cb55-9"><a href="preprocesamiento-y-visualización.html#cb55-9" tabindex="-1"></a>       <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;BOG&quot;</span>, <span class="st">&quot;MED&quot;</span>, <span class="st">&quot;VUP&quot;</span>))</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="preprocesamiento-y-visualización.html#cb56-1" tabindex="-1"></a><span class="co"># Media móvil semanal</span></span>
+<span id="cb56-2"><a href="preprocesamiento-y-visualización.html#cb56-2" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">rollmean</span>(df_temp_max_ts, <span class="dv">7</span>), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-22-2.png" width="672" /></p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="preprocesamiento-y-visualización.html#cb57-1" tabindex="-1"></a><span class="co"># Media móvil mensual</span></span>
+<span id="cb57-2"><a href="preprocesamiento-y-visualización.html#cb57-2" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">rollmean</span>(df_temp_max_ts, <span class="dv">30</span>), <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-22-3.png" width="672" /></p>
+<p>En las gráficas anteriores se aprecian las series de tiempo original de temperatura máxima diaria, con las medias móviles semanales en azul oscuro y la mensual en rojo. A pesar de los datos faltantes (posiblemente por pandemia), las medias móviles se calculan y grafican para las tres ciudades en los años iniciales y continuan solamente para Medellín (línea verde claro) y aunque no se nota casi para Valledupar también (línea naranja). Bogotá al contar con la mayor cantidad de datos faltantes no se calcula, ni grafica después de retomarse las mediciones en el año 2023.</p>
+<p>Ahora se procede con las medias móviles semanales y mensuales de los datos de precipitación:</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="preprocesamiento-y-visualización.html#cb58-1" tabindex="-1"></a><span class="co"># Serie original</span></span>
+<span id="cb58-2"><a href="preprocesamiento-y-visualización.html#cb58-2" tabindex="-1"></a><span class="fu">plot</span>(df_rain_ts, </span>
+<span id="cb58-3"><a href="preprocesamiento-y-visualización.html#cb58-3" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&#39;Precipitación total diaria&#39;</span>, </span>
+<span id="cb58-4"><a href="preprocesamiento-y-visualización.html#cb58-4" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&#39;Fecha&#39;</span>, <span class="at">ylab=</span><span class="st">&#39;Lluvia [mm]&#39;</span>,</span>
+<span id="cb58-5"><a href="preprocesamiento-y-visualización.html#cb58-5" tabindex="-1"></a>     <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;lightblue&quot;</span>, <span class="st">&quot;lightgreen&quot;</span>, <span class="st">&quot;orange&quot;</span>))</span>
+<span id="cb58-6"><a href="preprocesamiento-y-visualización.html#cb58-6" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottom&quot;</span>, </span>
+<span id="cb58-7"><a href="preprocesamiento-y-visualización.html#cb58-7" tabindex="-1"></a>       <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;BOG&quot;</span>, <span class="st">&quot;MED&quot;</span>, <span class="st">&quot;VUP&quot;</span>))</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="preprocesamiento-y-visualización.html#cb59-1" tabindex="-1"></a><span class="co"># Media móvil semanal</span></span>
+<span id="cb59-2"><a href="preprocesamiento-y-visualización.html#cb59-2" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">rollmean</span>(df_rain_ts, <span class="dv">7</span>), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-23-2.png" width="672" /></p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="preprocesamiento-y-visualización.html#cb60-1" tabindex="-1"></a><span class="co"># Media móvil mensual</span></span>
+<span id="cb60-2"><a href="preprocesamiento-y-visualización.html#cb60-2" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">rollmean</span>(df_rain_ts, <span class="dv">30</span>), <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-23-3.png" width="672" /></p>
+<p>Las medias móviles semanales y mensuales de las series de precipitación se calculan y grafican sin problema, aunque al ser tan cercanas, no alcanzan a diferenciarse, es notorio el salto en marzo 2022 por las lluvias superiores a 700 mm en Valledupar.</p>
+</div>
+<div id="descomposición" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Descomposición<a href="preprocesamiento-y-visualización.html#descomposición" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En vista de los <a href="estructura-de-las-series-de-tiempo.html#datos-faltantes">Datos faltantes</a> en los datasets, especialmente para los registros de temperatura, se procede a realizar la descomposición para el 2022 de precipitación en Bogotá y el 2023 de temperatura en Medellín.</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="preprocesamiento-y-visualización.html#cb61-1" tabindex="-1"></a><span class="co"># Precipitación total diaria Bogotá 2022</span></span>
+<span id="cb61-2"><a href="preprocesamiento-y-visualización.html#cb61-2" tabindex="-1"></a>BOG_rain_2022 <span class="ot">&lt;-</span> df_rain_ts[<span class="st">&quot;2022&quot;</span>, <span class="st">&quot;BOG&quot;</span>]</span>
+<span id="cb61-3"><a href="preprocesamiento-y-visualización.html#cb61-3" tabindex="-1"></a><span class="fu">head</span>(BOG_rain_2022)</span></code></pre></div>
+<pre><code>##            BOG
+## 2022-01-01 0.0
+## 2022-01-02 0.0
+## 2022-01-03 0.0
+## 2022-01-04 0.6
+## 2022-01-05 0.0
+## 2022-01-06 0.0</code></pre>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="preprocesamiento-y-visualización.html#cb63-1" tabindex="-1"></a><span class="fu">tail</span>(BOG_rain_2022)</span></code></pre></div>
+<pre><code>##            BOG
+## 2022-12-26 0.2
+## 2022-12-27 0.0
+## 2022-12-28 0.1
+## 2022-12-29 0.1
+## 2022-12-30 0.2
+## 2022-12-31 0.3</code></pre>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="preprocesamiento-y-visualización.html#cb65-1" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(BOG_rain_2022))</span></code></pre></div>
+<pre><code>## BOG 
+##   0</code></pre>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="preprocesamiento-y-visualización.html#cb67-1" tabindex="-1"></a><span class="co"># Temperatura máxima diaria Medellín 2023</span></span>
+<span id="cb67-2"><a href="preprocesamiento-y-visualización.html#cb67-2" tabindex="-1"></a>MED_temp_2023 <span class="ot">&lt;-</span> df_temp_max_ts[<span class="st">&quot;2023&quot;</span>, <span class="st">&quot;MED&quot;</span>]</span>
+<span id="cb67-3"><a href="preprocesamiento-y-visualización.html#cb67-3" tabindex="-1"></a><span class="fu">head</span>(MED_temp_2023)</span></code></pre></div>
+<pre><code>##             MED
+## 2023-01-01 26.8
+## 2023-01-02 27.9
+## 2023-01-03 22.5
+## 2023-01-04 27.5
+## 2023-01-05 25.6
+## 2023-01-06 26.4</code></pre>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="preprocesamiento-y-visualización.html#cb69-1" tabindex="-1"></a><span class="fu">tail</span>(MED_temp_2023)</span></code></pre></div>
+<pre><code>##             MED
+## 2023-12-26 28.0
+## 2023-12-27 29.2
+## 2023-12-28 26.2
+## 2023-12-29 26.9
+## 2023-12-30 28.2
+## 2023-12-31 29.4</code></pre>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="preprocesamiento-y-visualización.html#cb71-1" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(MED_temp_2023))</span></code></pre></div>
+<pre><code>## MED 
+##   0</code></pre>
+<p>Se procede a realizar la descomposición en las series con frecuencias mensuales (30 días), tanto para la lluvia en Bogotá y la temperatura en Medellín.</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="preprocesamiento-y-visualización.html#cb73-1" tabindex="-1"></a><span class="co"># Decompose Lluvia</span></span>
+<span id="cb73-2"><a href="preprocesamiento-y-visualización.html#cb73-2" tabindex="-1"></a><span class="fu">attr</span>(BOG_rain_2022, <span class="st">&#39;frequency&#39;</span>) <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb73-3"><a href="preprocesamiento-y-visualización.html#cb73-3" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">decompose</span>(<span class="fu">as.ts</span>(BOG_rain_2022)))</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>De la gráfica de tendencia se aprecia claramente que los mayores registros de precipitación se encuentran entre marzo y mayo (meses 3 y 5) y nuevamente se presentan altas lluvias entre septiembre y noviembre (meses 9-11), lo cual evidencia como en todo el país un ciclo de lluvias bimodal.</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="preprocesamiento-y-visualización.html#cb74-1" tabindex="-1"></a><span class="co"># Decompose temperatura</span></span>
+<span id="cb74-2"><a href="preprocesamiento-y-visualización.html#cb74-2" tabindex="-1"></a><span class="fu">attr</span>(MED_temp_2023, <span class="st">&#39;frequency&#39;</span>) <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb74-3"><a href="preprocesamiento-y-visualización.html#cb74-3" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">decompose</span>(<span class="fu">as.ts</span>(MED_temp_2023)))</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="preprocesamiento-y-visualización.html#cb75-1" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">stl</span>(MED_temp_2023, <span class="at">s.window =</span> <span class="st">&quot;periodic&quot;</span>))</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-26-2.png" width="672" /></p>
+<p>Como se puede apreciar en las gráficas anteriores para la temperatura, se obtienen los mismos resultados usando <code>decompose</code> y <code>plot</code> y <code>stl</code> y <code>autplot</code>. En Medellín, las mayores temperaturas se presentan en los meses de mitad de año (lo meses que seguramente llueven menos), especialmente en agosto (mes 8).</p>
+<p>Las tendencias mensuales anteriores encontradas por descomposición corresponden a identificado por el <span class="citation">(<a href="#ref-ideam_clima">IDEAM - Instituto de Hidrología, Meteorología y Estudios Ambientales 2012</a>)</span> para las características climatológicas de ciudades principales y municipios turísticos como Bogotá y Medellín.</p>
+</div>
+<div id="dickey-fuller-test" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Dickey-Fuller Test<a href="preprocesamiento-y-visualización.html#dickey-fuller-test" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Se aplica la función <code>adf.test</code> para verificar si las series seleccionadas son estacionarias:</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="preprocesamiento-y-visualización.html#cb76-1" tabindex="-1"></a><span class="co"># ADF lluvia</span></span>
+<span id="cb76-2"><a href="preprocesamiento-y-visualización.html#cb76-2" tabindex="-1"></a><span class="fu">adf.test</span>(<span class="fu">as.ts</span>(BOG_rain_2022), <span class="at">alternative =</span> <span class="st">&quot;stationary&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+##  Augmented Dickey-Fuller Test
+## 
+## data:  as.ts(BOG_rain_2022)
+## Dickey-Fuller = -5.0401, Lag order = 7, p-value = 0.01
+## alternative hypothesis: stationary</code></pre>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="preprocesamiento-y-visualización.html#cb78-1" tabindex="-1"></a><span class="co"># ADF temperatura</span></span>
+<span id="cb78-2"><a href="preprocesamiento-y-visualización.html#cb78-2" tabindex="-1"></a><span class="fu">adf.test</span>(<span class="fu">as.ts</span>(MED_temp_2023), <span class="at">alternative =</span> <span class="st">&quot;stationary&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+##  Augmented Dickey-Fuller Test
+## 
+## data:  as.ts(MED_temp_2023)
+## Dickey-Fuller = -4.2854, Lag order = 7, p-value = 0.01
+## alternative hypothesis: stationary</code></pre>
+<p>Tal como se ve en el material de la Unidad 3, si el valor <span class="math inline">\(p\)</span> es menor que <span class="math inline">\(0.05\)</span> las series son estacionarias, en este caso evidentemente, la lluvia y temperatura diaria son estacionarias. Pensando en un nivel de significancia del <span class="math inline">\(5\%\)</span></p>
+<p>De todos modos se verifica con <code>ndiffs</code>:</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="preprocesamiento-y-visualización.html#cb80-1" tabindex="-1"></a><span class="co"># NDIFF lluvia</span></span>
+<span id="cb80-2"><a href="preprocesamiento-y-visualización.html#cb80-2" tabindex="-1"></a><span class="fu">ndiffs</span>(<span class="fu">as.ts</span>(BOG_rain_2022))</span></code></pre></div>
+<pre><code>## [1] 0</code></pre>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="preprocesamiento-y-visualización.html#cb82-1" tabindex="-1"></a><span class="co"># NDIFF temperatura</span></span>
+<span id="cb82-2"><a href="preprocesamiento-y-visualización.html#cb82-2" tabindex="-1"></a><span class="fu">ndiffs</span>(<span class="fu">as.ts</span>(MED_temp_2023))</span></code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<p>Encontramos que <code>ndiffs</code> nos da <span class="math inline">\(1\)</span> para la serie de temperatura en Medellín por lo que aplicamos <code>diff</code>:</p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="preprocesamiento-y-visualización.html#cb84-1" tabindex="-1"></a>MED_temp_2023_diff <span class="ot">&lt;-</span> <span class="fu">diff</span>(<span class="fu">as.ts</span>(MED_temp_2023))</span>
+<span id="cb84-2"><a href="preprocesamiento-y-visualización.html#cb84-2" tabindex="-1"></a><span class="fu">plot</span>(MED_temp_2023_diff, </span>
+<span id="cb84-3"><a href="preprocesamiento-y-visualización.html#cb84-3" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Diferencia de temperatura máxima diaria en Medellín 2023&quot;</span>,</span>
+<span id="cb84-4"><a href="preprocesamiento-y-visualización.html#cb84-4" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">&quot;Diferencia de temperatura&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Tiempo&quot;</span>,</span>
+<span id="cb84-5"><a href="preprocesamiento-y-visualización.html#cb84-5" tabindex="-1"></a>     <span class="at">col=</span><span class="st">&quot;lightgreen&quot;</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p>Volvemos a verificar con <code>adf</code></p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="preprocesamiento-y-visualización.html#cb85-1" tabindex="-1"></a><span class="fu">adf.test</span>(MED_temp_2023_diff)</span></code></pre></div>
+<pre><code>## Warning in adf.test(MED_temp_2023_diff): p-value smaller than printed p-value</code></pre>
+<pre><code>## 
+##  Augmented Dickey-Fuller Test
+## 
+## data:  MED_temp_2023_diff
+## Dickey-Fuller = -10.091, Lag order = 7, p-value = 0.01
+## alternative hypothesis: stationary</code></pre>
+</div>
+<div id="funciones-de-autocorrelación-acf-y-pacf" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Funciones de autocorrelación (ACF y PACF)<a href="preprocesamiento-y-visualización.html#funciones-de-autocorrelación-acf-y-pacf" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Ahora se aplican las funciones de autocorrelación <code>acf</code> () y <code>pacf</code> () a las series seleccionados de precipitación y temperaturas diarias:</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="preprocesamiento-y-visualización.html#cb88-1" tabindex="-1"></a><span class="co"># ACF y PACF Lluvia</span></span>
+<span id="cb88-2"><a href="preprocesamiento-y-visualización.html#cb88-2" tabindex="-1"></a><span class="fu">acf</span>(BOG_rain_2022)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="preprocesamiento-y-visualización.html#cb89-1" tabindex="-1"></a><span class="fu">pacf</span>(BOG_rain_2022)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-32-2.png" width="672" /></p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="preprocesamiento-y-visualización.html#cb90-1" tabindex="-1"></a><span class="co"># ACF y PACF temperatura</span></span>
+<span id="cb90-2"><a href="preprocesamiento-y-visualización.html#cb90-2" tabindex="-1"></a><span class="fu">acf</span>(MED_temp_2023_diff)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="preprocesamiento-y-visualización.html#cb91-1" tabindex="-1"></a><span class="fu">pacf</span>(MED_temp_2023_diff)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-33-2.png" width="672" /></p>
+<p>Los anteriores resultados se estudiarán en mayor profundidad al ver modelos AR / ARIMA.</p>
+</div>
+<div id="rezagos" class="section level2 hasAnchor" number="3.5">
+<h2><span class="header-section-number">3.5</span> Rezagos<a href="preprocesamiento-y-visualización.html#rezagos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Por último se generan las gráficas de rezagos:</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="preprocesamiento-y-visualización.html#cb92-1" tabindex="-1"></a><span class="co"># Rezagos Lluvia</span></span>
+<span id="cb92-2"><a href="preprocesamiento-y-visualización.html#cb92-2" tabindex="-1"></a><span class="fu">lag.plot</span>(BOG_rain_2022, <span class="at">lags =</span> <span class="dv">12</span>, <span class="at">do.lines =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="preprocesamiento-y-visualización.html#cb93-1" tabindex="-1"></a><span class="co"># Rezagos Temperatura</span></span>
+<span id="cb93-2"><a href="preprocesamiento-y-visualización.html#cb93-2" tabindex="-1"></a><span class="fu">lag.plot</span>(MED_temp_2023, <span class="at">lags =</span> <span class="dv">12</span>, <span class="at">do.lines =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+
+</div>
+</div>
+<h3>Referencias<a href="referencias.html#referencias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-ideam_clima" class="csl-entry">
+IDEAM - Instituto de Hidrología, Meteorología y Estudios Ambientales. 2012. <span>«Características climatológicas de ciudades principales y municipios turisticos»</span>. <a href="http://www.ideam.gov.co/web/entidad/acerca-entidad">http://www.ideam.gov.co/web/entidad/acerca-entidad</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="estructura-de-las-series-de-tiempo.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="referencias.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

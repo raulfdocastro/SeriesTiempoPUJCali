@@ -31,7 +31,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="estructura-de-las-series-de-tiempo.html"/>
+<link rel="prev" href="preprocesamiento-y-visualización.html"/>
 
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -180,15 +180,23 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="2.1" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#variables-a-analizar"><i class="fa fa-check"></i><b>2.1</b> Variables a analizar</a></li>
 <li class="chapter" data-level="2.2" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#conjunto-de-datos"><i class="fa fa-check"></i><b>2.2</b> Conjunto de datos</a></li>
-<li class="chapter" data-level="2.3" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#series-de-tiempo"><i class="fa fa-check"></i><b>2.3</b> Series de tiempo</a></li>
+<li class="chapter" data-level="2.3" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#series-tiempo"><i class="fa fa-check"></i><b>2.3</b> Series de tiempo</a></li>
 <li class="chapter" data-level="2.4" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#datos-faltantes"><i class="fa fa-check"></i><b>2.4</b> Datos faltantes</a></li>
-<li class="chapter" data-level="2.5" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#análisis-exploratorio"><i class="fa fa-check"></i><b>2.5</b> Análisis exploratorio</a>
+<li class="chapter" data-level="2.5" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#EDA"><i class="fa fa-check"></i><b>2.5</b> Análisis exploratorio</a>
 <ul>
 <li class="chapter" data-level="2.5.1" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#boxplots"><i class="fa fa-check"></i><b>2.5.1</b> Boxplots</a></li>
 <li class="chapter" data-level="2.5.2" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#histogramas"><i class="fa fa-check"></i><b>2.5.2</b> Histogramas</a></li>
 <li class="chapter" data-level="2.5.3" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#análisis-por-años"><i class="fa fa-check"></i><b>2.5.3</b> Análisis por años</a></li>
 </ul></li>
 <li class="chapter" data-level="2.6" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#observaciones-finales"><i class="fa fa-check"></i><b>2.6</b> Observaciones finales</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html"><i class="fa fa-check"></i><b>3</b> Preprocesamiento y visualización</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#medias-móviles"><i class="fa fa-check"></i><b>3.1</b> Medias móviles</a></li>
+<li class="chapter" data-level="3.2" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#descomposición"><i class="fa fa-check"></i><b>3.2</b> Descomposición</a></li>
+<li class="chapter" data-level="3.3" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#dickey-fuller-test"><i class="fa fa-check"></i><b>3.3</b> Dickey-Fuller Test</a></li>
+<li class="chapter" data-level="3.4" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#funciones-de-autocorrelación-acf-y-pacf"><i class="fa fa-check"></i><b>3.4</b> Funciones de autocorrelación (ACF y PACF)</a></li>
+<li class="chapter" data-level="3.5" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#rezagos"><i class="fa fa-check"></i><b>3.5</b> Rezagos</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
 </ul>
@@ -214,7 +222,10 @@ Maestría en Ciencia de Datos</a>
 
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div class="csl-entry">
-IDEAM - Instituto de Hidrología, Meteorología y Estudios Ambientales. 2021. <span>«Banco de <span>Datos</span> del <span>IDEAM</span> - <span>DHIME</span>»</span>. <a href="http://dhime.ideam.gov.co/atencionciudadano/">http://dhime.ideam.gov.co/atencionciudadano/</a>.
+IDEAM - Instituto de Hidrología, Meteorología y Estudios Ambientales. 2012. <span>«Características climatológicas de ciudades principales y municipios turisticos»</span>. <a href="http://www.ideam.gov.co/web/entidad/acerca-entidad">http://www.ideam.gov.co/web/entidad/acerca-entidad</a>.
+</div>
+<div class="csl-entry">
+———. 2021. <span>«Banco de <span>Datos</span> del <span>IDEAM</span> - <span>DHIME</span>»</span>. <a href="http://dhime.ideam.gov.co/atencionciudadano/">http://dhime.ideam.gov.co/atencionciudadano/</a>.
 </div>
 <div class="csl-entry">
 ———. 2024. <span>«Acerca de la <span>Entidad</span>»</span>. <a href="http://www.ideam.gov.co/web/entidad/acerca-entidad">http://www.ideam.gov.co/web/entidad/acerca-entidad</a>.
@@ -235,7 +246,7 @@ OMS - Organización Mundial de la Salud. 2021. <span>«Cambio climático»</span
           </div>
         </div>
       </div>
-<a href="estructura-de-las-series-de-tiempo.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="preprocesamiento-y-visualización.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>
@@ -290,6 +301,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

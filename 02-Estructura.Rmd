@@ -86,7 +86,7 @@ head(df_rain_pivot)
 ```
 
 
-## Series de tiempo
+## Series de tiempo {#series-tiempo}
 
 Se verifican que los registros tengan todos los días del periodo seleccionado en los *dataframes* y completan con un join para todo el periodo de ser necesario:
 ```{r}
@@ -153,7 +153,7 @@ colSums(is.na(df_rain_ts))
 
 Tal como se había observado gráficamente, las series de tiempo cuentan con datos faltantes / vacíos, lo cual es notorio al especialmente para la temperatura máxima diaria en Bogotá y Valledupar.
 
-## Análisis exploratorio
+## Análisis exploratorio {#EDA}
 
 Se inicia el análisis exploratorio obteniendo realizando un resumen estadístico con `summary` para cada una de las variables y ciudades estudiadas.
 
