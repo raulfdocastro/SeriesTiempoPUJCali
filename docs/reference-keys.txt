@@ -21,3 +21,7 @@ descomposición
 dickey-fuller-test
 funciones-de-autocorrelación-acf-y-pacf
 rezagos
+introducción-modelos-pronóstico
+tendencias-y-ciclos
+modelo-holt-winters
+predicciones-iniciales
