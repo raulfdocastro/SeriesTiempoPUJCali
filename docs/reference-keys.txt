@@ -25,3 +25,12 @@ introducción-modelos-pronóstico
 tendencias-y-ciclos
 modelo-holt-winters
 predicciones-iniciales
+modelos-estacionarios-en-series-de-tiempo
+selección-de-series
+puntos-de-cambio
+verificación-de-estacionariedad
+funciones-de-acf-y-pact
+modelos-arima
+predicciones-arima
+verificación-valores-atípicos
+observaciones-predicciones
