@@ -213,7 +213,8 @@ div.csl-indent {
 <li class="chapter" data-level="5.5" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#modelos-arima"><i class="fa fa-check"></i><b>5.5</b> Modelos ARIMA</a>
 <ul>
 <li class="chapter" data-level="5.5.1" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#predicciones-arima"><i class="fa fa-check"></i><b>5.5.1</b> Predicciones ARIMA</a></li>
-<li class="chapter" data-level="5.5.2" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#verificación-valores-atípicos"><i class="fa fa-check"></i><b>5.5.2</b> Verificación valores atípicos</a></li>
+<li class="chapter" data-level="5.5.2" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#predicciones-forecast"><i class="fa fa-check"></i><b>5.5.2</b> Predicciones forecast</a></li>
+<li class="chapter" data-level="5.5.3" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#verificación-valores-atípicos"><i class="fa fa-check"></i><b>5.5.3</b> Verificación valores atípicos</a></li>
 </ul></li>
 <li class="chapter" data-level="5.6" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#observaciones-predicciones"><i class="fa fa-check"></i><b>5.6</b> Observaciones predicciones</a></li>
 </ul></li>
@@ -412,10 +413,145 @@ Maestría en Ciencia de Datos</a>
 ## AIC=2837.91   AICc=2838.03   BIC=2865.46</code></pre>
 <div id="predicciones-arima" class="section level3 hasAnchor" number="5.5.1">
 <h3><span class="header-section-number">5.5.1</span> Predicciones ARIMA<a href="modelos-estacionarios-en-series-de-tiempo.html#predicciones-arima" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Con los modelos ARIMA listos, se procede a predecir con un horizonte 30 días para cada una de las series de temperatura estudiada:</p>
-<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb225-1" tabindex="-1"></a><span class="co"># Predicciones Valledupar</span></span>
-<span id="cb225-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb225-2" tabindex="-1"></a>VUP_temp_pred <span class="ot">&lt;-</span> <span class="fu">forecast</span>(VUP_temp_2018_2019_ts, <span class="at">h =</span> <span class="dv">30</span>)</span>
-<span id="cb225-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb225-3" tabindex="-1"></a>VUP_temp_pred</span></code></pre></div>
+<p>Con los modelos ARIMA listos, con la función <code>forecast</code>y usando los modelos anteriores se procede a predecir 30 días para cada una de las series de Valledupar y Medellín:</p>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb225-1" tabindex="-1"></a><span class="co"># Forecast ARIMA Valledupar</span></span>
+<span id="cb225-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb225-2" tabindex="-1"></a>VUP_temp_arima <span class="ot">&lt;-</span> <span class="fu">forecast</span>(VUP_temp_model, <span class="at">h =</span> <span class="dv">30</span>,<span class="at">level=</span><span class="dv">95</span>)</span>
+<span id="cb225-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb225-3" tabindex="-1"></a>VUP_temp_arima</span></code></pre></div>
+<pre><code>##     Point Forecast    Lo 95    Hi 95
+## 731       35.38321 32.39203 38.37439
+## 732       35.40162 32.15150 38.65173
+## 733       35.46981 32.06462 38.87499
+## 734       35.49066 32.00074 38.98058
+## 735       35.50181 31.95145 39.05217
+## 736       35.50560 31.90761 39.10360
+## 737       35.50629 31.86778 39.14479
+## 738       35.50538 31.83104 39.17973
+## 739       35.50375 31.79699 39.21051
+## 740       35.50179 31.76536 39.23822
+## 741       35.49971 31.73595 39.26347
+## 742       35.49761 31.70859 39.28663
+## 743       35.49554 31.68312 39.30795
+## 744       35.49351 31.65939 39.32763
+## 745       35.49154 31.63727 39.34580
+## 746       35.48962 31.61665 39.36260
+## 747       35.48778 31.59741 39.37814
+## 748       35.48599 31.57946 39.39251
+## 749       35.48426 31.56270 39.40582
+## 750       35.48259 31.54705 39.41813
+## 751       35.48097 31.53242 39.42953
+## 752       35.47941 31.51875 39.44008
+## 753       35.47790 31.50596 39.44984
+## 754       35.47645 31.49401 39.45889
+## 755       35.47504 31.48282 39.46726
+## 756       35.47368 31.47235 39.47500
+## 757       35.47236 31.46255 39.48218
+## 758       35.47109 31.45338 39.48881
+## 759       35.46987 31.44478 39.49496
+## 760       35.46868 31.43672 39.50064</code></pre>
+<p>Se encuentra que para Valledupar se obtienen predicciones con <code>auto.arima</code> muy cercanas, entre 35.38 y 35.51 ºC, con sola una variación de 0.12 grados Celsius, por lo realmente son prácticamente constantes (en 35.4 o 35.5 ºC). El promedio de los <em>forecasts</em> <code>auto.arima</code> es de 35.48 ºC (la media de toda la serie de tiempo).</p>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb227-1" tabindex="-1"></a><span class="co"># Forecast ARIMA Medellín</span></span>
+<span id="cb227-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb227-2" tabindex="-1"></a>MED_temp_arima <span class="ot">&lt;-</span> <span class="fu">forecast</span>(MED_temp_model, <span class="at">h =</span> <span class="dv">30</span>,<span class="at">level=</span><span class="dv">95</span>)</span>
+<span id="cb227-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb227-3" tabindex="-1"></a>MED_temp_arima</span></code></pre></div>
+<pre><code>##     Point Forecast    Lo 95    Hi 95
+## 731       28.80578 25.50406 32.10750
+## 732       28.92633 25.41118 32.44147
+## 733       28.73615 25.12274 32.34956
+## 734       28.87938 25.23192 32.52684
+## 735       28.71806 25.04432 32.39181
+## 736       28.86159 25.17718 32.54600
+## 737       28.71567 25.01790 32.41343
+## 738       28.85301 25.14901 32.55701
+## 739       28.71792 25.00380 32.43203
+## 740       28.84747 25.12818 32.56676
+## 741       28.72141 24.99304 32.44978
+## 742       28.84305 25.10974 32.57635
+## 743       28.72511 24.98316 32.46706
+## 744       28.83914 25.09227 32.58601
+## 745       28.72871 24.97343 32.48400
+## 746       28.83556 25.07531 32.59581
+## 747       28.73212 24.96364 32.50061
+## 748       28.83222 25.05870 32.60575
+## 749       28.73533 24.95373 32.51694
+## 750       28.82911 25.04240 32.61582
+## 751       28.73835 24.94369 32.53300
+## 752       28.82619 25.02637 32.62601
+## 753       28.74117 24.93352 32.54881
+## 754       28.82346 25.01059 32.63633
+## 755       28.74381 24.92323 32.56439
+## 756       28.82090 24.99505 32.64675
+## 757       28.74629 24.91284 32.57974
+## 758       28.81850 24.97973 32.65728
+## 759       28.74861 24.90234 32.59488
+## 760       28.81626 24.96462 32.66790</code></pre>
+<p>Al igual que la predicción anterior, para Medellín se obtienen valores casi constantes con <code>auto.arima</code> y <code>forecast</code> muy cercanos entre ellos (28.7 ºC - 28.9 ºC), con sola una variación de 0.21 ºC. El promedio de dichas predicciones es 28.79 ºC.</p>
+<p>A continuación, se grafican con <code>plot</code> las predicciones <code>auto.arima</code> obtenidas para Valledupar y Medellín:</p>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb229-1" tabindex="-1"></a><span class="co"># Plot forecast Valledupar</span></span>
+<span id="cb229-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb229-2" tabindex="-1"></a><span class="fu">plot</span>(VUP_temp_arima, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>,</span>
+<span id="cb229-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb229-3" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Predicción ARIMA Temperatura máxima Valledupar&quot;</span>, </span>
+<span id="cb229-4"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb229-4" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Tiempo / Día&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Temperatura [°C]&quot;</span>)</span>
+<span id="cb229-5"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb229-5" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">mean</span>(VUP_temp_2018_2019), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lty =</span> <span class="st">&quot;dotted&quot;</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-79-1.png" width="672" /></p>
+<p>En la figura anterior, se aprecia poca variabilidad en la línea azul de la predicción para Valledupar y se nota claramente que los valores son en esencia la media de la serie de tiempo.</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb230-1" tabindex="-1"></a><span class="co"># Plot forecast Medellín</span></span>
+<span id="cb230-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb230-2" tabindex="-1"></a><span class="fu">plot</span>(MED_temp_arima, <span class="at">col =</span> <span class="st">&quot;lightgreen&quot;</span>, </span>
+<span id="cb230-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb230-3" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Predicción ARIMA Temperatura máxima Medellín&quot;</span>, </span>
+<span id="cb230-4"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb230-4" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Tiempo / Día&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Temperatura [°C]&quot;</span>)</span>
+<span id="cb230-5"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb230-5" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">mean</span>(MED_temp_2022_2023), <span class="at">col =</span> <span class="st">&quot;purple&quot;</span>, <span class="at">lty =</span> <span class="st">&quot;dotted&quot;</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
+<p>En Medellín, se aprecia para predicción prácticamente una línea recta, aunque esta vez más cercana a la media después del punto de cambio que a la media de toda la serie.</p>
+<div id="cálculos-residuales" class="section level4 hasAnchor" number="5.5.1.1">
+<h4><span class="header-section-number">5.5.1.1</span> Cálculos residuales<a href="modelos-estacionarios-en-series-de-tiempo.html#cálculos-residuales" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Ahora para las predicciones ARIMA, se estiman los residuales y se grafican con <code>qqnorm</code>.</p>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb231-1" tabindex="-1"></a><span class="co"># Residuales Valledupar</span></span>
+<span id="cb231-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb231-2" tabindex="-1"></a>VUP_temp_res <span class="ot">=</span> VUP_temp_arima<span class="sc">$</span>residuals</span>
+<span id="cb231-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb231-3" tabindex="-1"></a><span class="fu">qqnorm</span>(VUP_temp_res)</span>
+<span id="cb231-4"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb231-4" tabindex="-1"></a><span class="fu">qqline</span>(VUP_temp_res)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-81-1.png" width="672" /></p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb232-1" tabindex="-1"></a><span class="co"># Residuales Medellín</span></span>
+<span id="cb232-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb232-2" tabindex="-1"></a>MED_temp_res <span class="ot">=</span> MED_temp_arima<span class="sc">$</span>residuals</span>
+<span id="cb232-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb232-3" tabindex="-1"></a><span class="fu">qqnorm</span>(MED_temp_res)</span>
+<span id="cb232-4"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb232-4" tabindex="-1"></a><span class="fu">qqline</span>(MED_temp_res)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-82-1.png" width="672" /></p>
+<p>A continuación, se procede a comprobar la normalidad de los modelos ARIMA inicialmente aplicando las pruebas de Shapiro-Wilk con la función <code>shapiro.test</code>.</p>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb233-1" tabindex="-1"></a><span class="co"># Shapiro-Wilk Test Valledupar</span></span>
+<span id="cb233-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb233-2" tabindex="-1"></a><span class="fu">shapiro.test</span>(VUP_temp_res)</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  VUP_temp_res
+## W = 0.96438, p-value = 2.49e-12</code></pre>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb235-1" tabindex="-1"></a><span class="co"># Shapiro-Wilk Test Medellín</span></span>
+<span id="cb235-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb235-2" tabindex="-1"></a><span class="fu">shapiro.test</span>(MED_temp_res)</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  MED_temp_res
+## W = 0.97552, p-value = 1.051e-09</code></pre>
+<p>Ambos p-values son muy pequeños cercanos a 2.5E-12 y 1E-9 (por lo tanto mucho menor que 0.05), lo que indica que los modelos ARIMA para ambas ciudades no siguen una distribución normal.</p>
+<p>Finalmente, se aplican las pruebas Box-Pierce / Ljung-Box con la función <code>Box.test</code> para evaluar la independencia de los residuos.</p>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb237-1" tabindex="-1"></a><span class="co"># Box-Pierce Test Valledupar</span></span>
+<span id="cb237-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb237-2" tabindex="-1"></a><span class="fu">Box.test</span>(VUP_temp_res, <span class="at">type =</span> <span class="fu">c</span>(<span class="st">&quot;Box-Pierce&quot;</span>, <span class="st">&quot;Ljung-Box&quot;</span>))</span></code></pre></div>
+<pre><code>## 
+##  Box-Pierce test
+## 
+## data:  VUP_temp_res
+## X-squared = 0.0055686, df = 1, p-value = 0.9405</code></pre>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb239-1" tabindex="-1"></a><span class="co"># Box-Pierce Test Medellín</span></span>
+<span id="cb239-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb239-2" tabindex="-1"></a><span class="fu">Box.test</span>(MED_temp_res, <span class="at">type =</span> <span class="fu">c</span>(<span class="st">&quot;Box-Pierce&quot;</span>, <span class="st">&quot;Ljung-Box&quot;</span>))</span></code></pre></div>
+<pre><code>## 
+##  Box-Pierce test
+## 
+## data:  MED_temp_res
+## X-squared = 0.0079384, df = 1, p-value = 0.929</code></pre>
+<p>Los resultados de Box-Pierce, presentan p-values mayores a 0.9 (evidentemente por encima de 0.05), por lo tanto, no hay evidencia de autocorrelación significativa en los residuos de los modelos ARIMA y son independientes tanto para Valledupar, como para Medellín.</p>
+</div>
+</div>
+<div id="predicciones-forecast" class="section level3 hasAnchor" number="5.5.2">
+<h3><span class="header-section-number">5.5.2</span> Predicciones forecast<a href="modelos-estacionarios-en-series-de-tiempo.html#predicciones-forecast" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Ahora para comparar, se procede a predecir con la función <code>forecast</code> con un horizonte 30 días usando directamente cada una de las series de temperatura estudiadas:</p>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb241-1" tabindex="-1"></a><span class="co"># Forecast ts Valledupar</span></span>
+<span id="cb241-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb241-2" tabindex="-1"></a>VUP_temp_pred <span class="ot">&lt;-</span> <span class="fu">forecast</span>(VUP_temp_2018_2019_ts, <span class="at">h =</span> <span class="dv">30</span>)</span>
+<span id="cb241-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb241-3" tabindex="-1"></a>VUP_temp_pred</span></code></pre></div>
 <pre><code>##     Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95
 ## 731       35.44583 33.43742 37.45424 32.37423 38.51742
 ## 732       35.44583 33.29529 37.59637 32.15687 38.73479
@@ -448,9 +584,9 @@ Maestría en Ciencia de Datos</a>
 ## 759       35.44583 30.90879 39.98287 28.50702 42.38464
 ## 760       35.44583 30.84411 40.04755 28.40810 42.48356</code></pre>
 <p>Aunque se obtienen predicciones / forecasting sin problemas, se puede apreciar fácilmente que el modelo pronostica para la temperatura máxima diaria en Valledupar un valor constante de 35.4 ºC para todo el mes / 30 días siguientes.</p>
-<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb227-1" tabindex="-1"></a><span class="co"># Predicciones Valledupar</span></span>
-<span id="cb227-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb227-2" tabindex="-1"></a>MED_temp_pred <span class="ot">&lt;-</span> <span class="fu">forecast</span>(MED_temp_2022_2023_ts, <span class="at">h =</span> <span class="dv">30</span>)</span>
-<span id="cb227-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb227-3" tabindex="-1"></a>MED_temp_pred</span></code></pre></div>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb243-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb243-1" tabindex="-1"></a><span class="co"># Forecast ts Medellín</span></span>
+<span id="cb243-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb243-2" tabindex="-1"></a>MED_temp_pred <span class="ot">&lt;-</span> <span class="fu">forecast</span>(MED_temp_2022_2023_ts, <span class="at">h =</span> <span class="dv">30</span>)</span>
+<span id="cb243-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb243-3" tabindex="-1"></a>MED_temp_pred</span></code></pre></div>
 <pre><code>##     Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95
 ## 731       28.32534 26.09965 30.55104 24.92143 31.72926
 ## 732       28.32534 26.03224 30.61845 24.81834 31.83235
@@ -483,28 +619,28 @@ Maestría en Ciencia de Datos</a>
 ## 759       28.32534 24.65344 31.99725 22.70966 33.94103
 ## 760       28.32534 24.61220 32.03849 22.64657 34.00411</code></pre>
 <p>Al igual que con Valledupar, los pronósticos de Medellín son constantes en 28.3 ºC para todo el horizonte de 30 días solicitado al modelo.</p>
-<p>Para finalizar, a continuación se gráfican con <code>plot</code> las predicciones encontradas para Valledupar y Medellín:</p>
-<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb229-1" tabindex="-1"></a><span class="co"># Plot forecast Valledupar</span></span>
-<span id="cb229-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb229-2" tabindex="-1"></a><span class="fu">plot</span>(VUP_temp_pred, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>,</span>
-<span id="cb229-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb229-3" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Predicción Temperatura máxima Valledupar&quot;</span>, </span>
-<span id="cb229-4"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb229-4" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Tiempo / Día&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Temperatura [°C]&quot;</span>)</span>
-<span id="cb229-5"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb229-5" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">mean</span>(VUP_temp_2018_2019), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lty =</span> <span class="st">&quot;dotted&quot;</span>)</span></code></pre></div>
-<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-79-1.png" width="672" /></p>
+<p>Para finalizar, a continuación se grafican con <code>plot</code> las predicciones encontradas para Valledupar y Medellín:</p>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb245-1" tabindex="-1"></a><span class="co"># Plot forecast Valledupar</span></span>
+<span id="cb245-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb245-2" tabindex="-1"></a><span class="fu">plot</span>(VUP_temp_pred, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>,</span>
+<span id="cb245-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb245-3" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Forecast Temperatura máxima Valledupar&quot;</span>, </span>
+<span id="cb245-4"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb245-4" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Tiempo / Día&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Temperatura [°C]&quot;</span>)</span>
+<span id="cb245-5"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb245-5" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">mean</span>(VUP_temp_2018_2019), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lty =</span> <span class="st">&quot;dotted&quot;</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-87-1.png" width="672" /></p>
 <p>Como era de esperar, se obtiene una línea horizontal de la predicción que no varía par Valledupar alrededor de los 35 grados Celsius.</p>
-<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb230-1" tabindex="-1"></a><span class="co"># Plot forecast Medellín</span></span>
-<span id="cb230-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb230-2" tabindex="-1"></a><span class="fu">plot</span>(MED_temp_pred, <span class="at">col =</span> <span class="st">&quot;lightgreen&quot;</span>, </span>
-<span id="cb230-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb230-3" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Predicción Temperatura máxima Medellín&quot;</span>, </span>
-<span id="cb230-4"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb230-4" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Tiempo / Día&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Temperatura [°C]&quot;</span>)</span>
-<span id="cb230-5"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb230-5" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">mean</span>(MED_temp_2022_2023), <span class="at">col =</span> <span class="st">&quot;purple&quot;</span>, <span class="at">lty =</span> <span class="st">&quot;dotted&quot;</span>)</span></code></pre></div>
-<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb246-1" tabindex="-1"></a><span class="co"># Plot forecast Medellín</span></span>
+<span id="cb246-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb246-2" tabindex="-1"></a><span class="fu">plot</span>(MED_temp_pred, <span class="at">col =</span> <span class="st">&quot;lightgreen&quot;</span>, </span>
+<span id="cb246-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb246-3" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Forecast Temperatura máxima Medellín&quot;</span>, </span>
+<span id="cb246-4"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb246-4" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Tiempo / Día&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Temperatura [°C]&quot;</span>)</span>
+<span id="cb246-5"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb246-5" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">mean</span>(MED_temp_2022_2023), <span class="at">col =</span> <span class="st">&quot;purple&quot;</span>, <span class="at">lty =</span> <span class="st">&quot;dotted&quot;</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-88-1.png" width="672" /></p>
 <p>La gráfica anterior presenta el pronóstico para Medellín que como se ha calculado, se encuentra cerca de los 28 ºC.</p>
 </div>
-<div id="verificación-valores-atípicos" class="section level3 hasAnchor" number="5.5.2">
-<h3><span class="header-section-number">5.5.2</span> Verificación valores atípicos<a href="modelos-estacionarios-en-series-de-tiempo.html#verificación-valores-atípicos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="verificación-valores-atípicos" class="section level3 hasAnchor" number="5.5.3">
+<h3><span class="header-section-number">5.5.3</span> Verificación valores atípicos<a href="modelos-estacionarios-en-series-de-tiempo.html#verificación-valores-atípicos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Para terminar, con la función <code>tso</code> de la librería <code>tsoutliers</code>, se validan los ARIMA y grafican los efectos de los valores atípicos / <em>outliers</em> en las series:</p>
-<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb231-1" tabindex="-1"></a><span class="co"># Outliers Valledupar</span></span>
-<span id="cb231-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb231-2" tabindex="-1"></a>VUP_temp_outliers <span class="ot">&lt;-</span> <span class="fu">tso</span>(VUP_temp_2018_2019_ts)</span>
-<span id="cb231-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb231-3" tabindex="-1"></a>VUP_temp_outliers</span></code></pre></div>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb247-1" tabindex="-1"></a><span class="co"># Outliers Valledupar</span></span>
+<span id="cb247-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb247-2" tabindex="-1"></a>VUP_temp_outliers <span class="ot">&lt;-</span> <span class="fu">tso</span>(VUP_temp_2018_2019_ts)</span>
+<span id="cb247-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb247-3" tabindex="-1"></a>VUP_temp_outliers</span></code></pre></div>
 <pre><code>## Series: VUP_temp_2018_2019_ts 
 ## Regression with ARIMA(1,0,1) errors 
 ## 
@@ -521,14 +657,14 @@ Maestría en Ciencia de Datos</a>
 ## 1   TC 226  226  -6.891 -5.090
 ## 2   AO 555  555  -7.671 -5.769
 ## 3   TC 593  593  -5.710 -4.215</code></pre>
-<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb233-1" tabindex="-1"></a><span class="fu">plot</span>(VUP_temp_outliers,</span>
-<span id="cb233-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb233-2" tabindex="-1"></a>     <span class="at">args.lines.y =</span> <span class="fu">list</span>(<span class="at">col =</span> <span class="st">&quot;orange&quot;</span>),</span>
-<span id="cb233-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb233-3" tabindex="-1"></a>     <span class="at">args.lines.yadj =</span> <span class="fu">list</span>(<span class="at">col =</span> <span class="st">&quot;orangered&quot;</span>))</span></code></pre></div>
-<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-81-1.png" width="672" /></p>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb249-1" tabindex="-1"></a><span class="fu">plot</span>(VUP_temp_outliers,</span>
+<span id="cb249-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb249-2" tabindex="-1"></a>     <span class="at">args.lines.y =</span> <span class="fu">list</span>(<span class="at">col =</span> <span class="st">&quot;orange&quot;</span>),</span>
+<span id="cb249-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb249-3" tabindex="-1"></a>     <span class="at">args.lines.yadj =</span> <span class="fu">list</span>(<span class="at">col =</span> <span class="st">&quot;orangered&quot;</span>))</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-89-1.png" width="672" /></p>
 <p>En el caso de Valledupar, la función <code>tso</code> encuentra tres outliers, mientras como se aprecia a continuación para Medellín solamente uno. Ahora, <code>tso</code> encuentra el ajuste de la serie de Valledupar sin atípicos en ARIMA(1,0,1) y para Medellín en ARIMA(1,1,1).</p>
-<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb234-1" tabindex="-1"></a><span class="co"># Outliers Medellín</span></span>
-<span id="cb234-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb234-2" tabindex="-1"></a>MED_temp_outliers <span class="ot">&lt;-</span> <span class="fu">tso</span>(MED_temp_2022_2023_ts)</span>
-<span id="cb234-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb234-3" tabindex="-1"></a>MED_temp_outliers</span></code></pre></div>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb250-1" tabindex="-1"></a><span class="co"># Outliers Medellín</span></span>
+<span id="cb250-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb250-2" tabindex="-1"></a>MED_temp_outliers <span class="ot">&lt;-</span> <span class="fu">tso</span>(MED_temp_2022_2023_ts)</span>
+<span id="cb250-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb250-3" tabindex="-1"></a>MED_temp_outliers</span></code></pre></div>
 <pre><code>## Series: MED_temp_2022_2023_ts 
 ## Regression with ARIMA(1,1,1) errors 
 ## 
@@ -543,17 +679,103 @@ Maestría en Ciencia de Datos</a>
 ## Outliers:
 ##   type ind time coefhat  tstat
 ## 1   AO  50   50  -7.194 -4.681</code></pre>
-<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb236-1" tabindex="-1"></a><span class="fu">plot</span>(MED_temp_outliers,</span>
-<span id="cb236-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb236-2" tabindex="-1"></a>     <span class="at">args.lines.y =</span> <span class="fu">list</span>(<span class="at">col =</span> <span class="st">&quot;lightgreen&quot;</span>),</span>
-<span id="cb236-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb236-3" tabindex="-1"></a>     <span class="at">args.lines.yadj =</span> <span class="fu">list</span>(<span class="at">col =</span> <span class="st">&quot;darkgreen&quot;</span>))</span></code></pre></div>
-<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-82-1.png" width="672" /></p>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb252-1" tabindex="-1"></a><span class="fu">plot</span>(MED_temp_outliers,</span>
+<span id="cb252-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb252-2" tabindex="-1"></a>     <span class="at">args.lines.y =</span> <span class="fu">list</span>(<span class="at">col =</span> <span class="st">&quot;lightgreen&quot;</span>),</span>
+<span id="cb252-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb252-3" tabindex="-1"></a>     <span class="at">args.lines.yadj =</span> <span class="fu">list</span>(<span class="at">col =</span> <span class="st">&quot;darkgreen&quot;</span>))</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-90-1.png" width="672" /></p>
+<p>Ahora se realizan las predicciones con <code>forecast</code>, usando <code>auto.arima</code> con las series ajustadas sin outliers con <code>tso</code>:</p>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb253-1" tabindex="-1"></a><span class="co"># Forecast ts Valledupar</span></span>
+<span id="cb253-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb253-2" tabindex="-1"></a>VUP_temp_order <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(VUP_temp_outliers<span class="sc">$</span>yadj)</span>
+<span id="cb253-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb253-3" tabindex="-1"></a>VUP_temp_tso <span class="ot">&lt;-</span> <span class="fu">forecast</span>(VUP_temp_order, <span class="at">h =</span> <span class="dv">30</span>)</span>
+<span id="cb253-4"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb253-4" tabindex="-1"></a>VUP_temp_tso</span></code></pre></div>
+<pre><code>##     Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95
+## 731       35.47045 33.60325 37.33766 32.61481 38.32609
+## 732       35.40387 33.39455 37.41320 32.33087 38.47688
+## 733       35.48766 33.36300 37.61232 32.23828 38.73704
+## 734       35.49972 33.31234 37.68711 32.15440 38.84505
+## 735       35.51322 33.27777 37.74867 32.09440 38.93204
+## 736       35.51765 33.24397 37.79133 32.04036 38.99494
+## 737       35.51996 33.21346 37.82647 31.99247 39.04746
+## 738       35.52056 33.18504 37.85608 31.94868 39.09243
+## 739       35.52045 33.15875 37.88216 31.90853 39.13238
+## 740       35.51996 33.13438 37.90555 31.87153 39.16840
+## 741       35.51930 33.11181 37.92679 31.83736 39.20124
+## 742       35.51856 33.09089 37.94623 31.80576 39.23136
+## 743       35.51779 33.07151 37.96408 31.77652 39.25907
+## 744       35.51703 33.05353 37.98052 31.74943 39.28462
+## 745       35.51627 33.03685 37.99569 31.72433 39.30822
+## 746       35.51554 33.02138 38.00970 31.70105 39.33003
+## 747       35.51483 33.00701 38.02265 31.67945 39.35021
+## 748       35.51414 32.99366 38.03462 31.65939 39.36889
+## 749       35.51347 32.98125 38.04570 31.64077 39.38618
+## 750       35.51283 32.96971 38.05595 31.62346 39.40220
+## 751       35.51221 32.95898 38.06544 31.60738 39.41704
+## 752       35.51161 32.94899 38.07422 31.59243 39.43079
+## 753       35.51103 32.93970 38.08236 31.57852 39.44354
+## 754       35.51047 32.93105 38.08990 31.56558 39.45536
+## 755       35.50993 32.92299 38.09688 31.55354 39.46632
+## 756       35.50941 32.91547 38.10334 31.54233 39.47649
+## 757       35.50891 32.90848 38.10934 31.53189 39.48592
+## 758       35.50842 32.90195 38.11489 31.52217 39.49467
+## 759       35.50795 32.89587 38.12004 31.51311 39.50279
+## 760       35.50750 32.89019 38.12481 31.50467 39.51033</code></pre>
+<p>Tal como en las <a href="modelos-estacionarios-en-series-de-tiempo.html#predicciones-arima">Predicciones ARIMA</a>, para Valledupar se obtienen predicciones ajustadas con tso muy cercanas (35.40 y 35.52 ºC, con variación de 0.12 ºC) y un valor promedio de 35.51 ºC.</p>
+<p>Como se puede ver a continuación, para Medellín también se obtienen valores cercanos entre ellos (28.57 ºC - 28.84 ºC), con una variación de 0.27 ºC entre el mínimo y el máximo pronósticado. El promedio de las predicciones en este caso es de 28.76 ºC.</p>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb255-1" tabindex="-1"></a><span class="co"># Forecast ts Medellín</span></span>
+<span id="cb255-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb255-2" tabindex="-1"></a>MED_temp_order <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(MED_temp_outliers<span class="sc">$</span>yadj)</span>
+<span id="cb255-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb255-3" tabindex="-1"></a>MED_temp_tso <span class="ot">&lt;-</span> <span class="fu">forecast</span>(MED_temp_order, <span class="at">h =</span> <span class="dv">30</span>)</span>
+<span id="cb255-4"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb255-4" tabindex="-1"></a>MED_temp_tso</span></code></pre></div>
+<pre><code>##     Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95
+## 731       28.64836 26.52477 30.77195 25.40062 31.89611
+## 732       28.74427 26.47584 31.01271 25.27500 32.21354
+## 733       28.56859 26.25180 30.88538 25.02537 32.11181
+## 734       28.78553 26.44474 31.12633 25.20559 32.36547
+## 735       28.61834 26.24962 30.98705 24.99570 32.24097
+## 736       28.81121 26.42916 31.19325 25.16818 32.45423
+## 737       28.65393 26.25444 31.05341 24.98423 32.32362
+## 738       28.82656 26.41902 31.23409 25.14455 32.50856
+## 739       28.67979 26.26050 31.09908 24.97980 32.37978
+## 740       28.83512 26.41052 31.25971 25.12701 32.54322
+## 741       28.69894 26.26581 31.13206 24.97780 32.42008
+## 742       28.83925 26.40230 31.27620 25.11226 32.56624
+## 743       28.71341 26.26986 31.15695 24.97633 32.45049
+## 744       28.84054 26.39400 31.28708 25.09888 32.58220
+## 745       28.72459 26.27266 31.17653 24.97468 32.47451
+## 746       28.84004 26.38559 31.29450 25.08628 32.59381
+## 747       28.73344 26.27436 31.19252 24.97260 32.49428
+## 748       28.83846 26.37714 31.29978 25.07419 32.60273
+## 749       28.74060 26.27517 31.20603 24.97005 32.51115
+## 750       28.83625 26.36874 31.30376 25.06251 32.60999
+## 751       28.74652 26.27526 31.21778 24.96705 32.52599
+## 752       28.83372 26.36046 31.30697 25.05119 32.61624
+## 753       28.75151 26.27476 31.22826 24.96364 32.53938
+## 754       28.83105 26.35235 31.30976 25.04020 32.62190
+## 755       28.75578 26.27377 31.23780 24.95988 32.55169
+## 756       28.82839 26.34444 31.31233 25.02952 32.62725
+## 757       28.75950 26.27239 31.24661 24.95579 32.56321
+## 758       28.82579 26.33675 31.31483 25.01913 32.63245
+## 759       28.76277 26.27067 31.25486 24.95143 32.57410
+## 760       28.82331 26.32927 31.31735 25.00901 32.63762</code></pre>
+<p>Y como se realizado con los modelos anteriores, se grafican las predicciones sin outliers / tso con <code>plot</code>:</p>
+<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb257-1" tabindex="-1"></a><span class="co"># Plot tso Valledupar</span></span>
+<span id="cb257-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb257-2" tabindex="-1"></a><span class="fu">plot</span>(VUP_temp_tso, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>,</span>
+<span id="cb257-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb257-3" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Predicción TSO Temperatura máxima Valledupar&quot;</span>, </span>
+<span id="cb257-4"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb257-4" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Tiempo / Día&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Temperatura [°C]&quot;</span>)</span>
+<span id="cb257-5"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb257-5" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">mean</span>(VUP_temp_2018_2019), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lty =</span> <span class="st">&quot;dotted&quot;</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-93-1.png" width="672" /></p>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb258-1" tabindex="-1"></a><span class="co"># Plot tso Medellín</span></span>
+<span id="cb258-2"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb258-2" tabindex="-1"></a><span class="fu">plot</span>(MED_temp_tso, <span class="at">col =</span> <span class="st">&quot;lightgreen&quot;</span>, </span>
+<span id="cb258-3"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb258-3" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Predicción TSO Temperatura máxima Medellín&quot;</span>, </span>
+<span id="cb258-4"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb258-4" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Tiempo / Día&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Temperatura [°C]&quot;</span>)</span>
+<span id="cb258-5"><a href="modelos-estacionarios-en-series-de-tiempo.html#cb258-5" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">mean</span>(MED_temp_2022_2023), <span class="at">col =</span> <span class="st">&quot;purple&quot;</span>, <span class="at">lty =</span> <span class="st">&quot;dotted&quot;</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-94-1.png" width="672" /></p>
 </div>
 </div>
 <div id="observaciones-predicciones" class="section level2 hasAnchor" number="5.6">
 <h2><span class="header-section-number">5.6</span> Observaciones predicciones<a href="modelos-estacionarios-en-series-de-tiempo.html#observaciones-predicciones" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>En este caso, las predicciones se realizaron sin problemas, pero los valores / forecasts encontrados por los modelos fueron los más “simple” que corresponden prácticamente a la media / promedio de cada serie:<br />
-- Pronóstico de 35.45 ºC en Valledupar contra la media de 35.48 ºC de la serie.<br />
-- Pronóstico de 28.33 ºC en Medellín contra la media de 27.93 ºC de la serie.<br />
+- Pronósticos de ~35.48, 35.45 y ~35.51 ºC en Valledupar contra la media de 35.48 ºC de la serie.<br />
+- Pronósticos de ~28.79, 28.33 y ~28.76 ºC en Medellín contra la media de 27.93 ºC de la serie.<br />
 Los anteriores resultados, nos llevarían a explorar otros métodos de pronóstico para la temperatura máxima diaria.</p>
 
 </div>
