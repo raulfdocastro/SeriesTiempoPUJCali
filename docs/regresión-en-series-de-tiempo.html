@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 6 Regresión en series de tiempo | Universidad Javeriana Cali Maestría en Ciencia de Datos</title>
+  <meta name="description" content="Libro en Bookdown para la asignatura Análisis de Series de Tiempo - 20241 - B" />
+  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 6 Regresión en series de tiempo | Universidad Javeriana Cali Maestría en Ciencia de Datos" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Libro en Bookdown para la asignatura Análisis de Series de Tiempo - 20241 - B" />
+  <meta name="github-repo" content="raulfdocastro/SeriesTiempoPUJCali" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 6 Regresión en series de tiempo | Universidad Javeriana Cali Maestría en Ciencia de Datos" />
+  
+  <meta name="twitter:description" content="Libro en Bookdown para la asignatura Análisis de Series de Tiempo - 20241 - B" />
+  
+
+<meta name="author" content="Joan Sebastián García Villa" />
+<meta name="author" content="Laura Yohanna Bermúdez Murillo" />
+<meta name="author" content="Raúl Fernando Castro Suárez" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="modelos-estacionarios-en-series-de-tiempo.html"/>
+<link rel="next" href="referencias.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/dygraphs-1.1.1/dygraph.css" rel="stylesheet" />
+<script src="libs/dygraphs-1.1.1/dygraph-combined.js"></script>
+<script src="libs/dygraphs-1.1.1/shapes.js"></script>
+<script src="libs/moment-2.8.4/moment.js"></script>
+<script src="libs/moment-timezone-0.2.5/moment-timezone-with-data.js"></script>
+<script src="libs/moment-fquarter-1.0.0/moment-fquarter.min.js"></script>
+<script src="libs/dygraphs-binding-1.1.1.6/dygraphs.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="propuesta.html"><a href="propuesta.html"><i class="fa fa-check"></i><b>1</b> Propuesta Bookdown Grupo 7</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="propuesta.html"><a href="propuesta.html#tipo-de-datos"><i class="fa fa-check"></i><b>1.1</b> Tipo de datos</a></li>
+<li class="chapter" data-level="1.2" data-path="propuesta.html"><a href="propuesta.html#importancia-del-pronóstico"><i class="fa fa-check"></i><b>1.2</b> Importancia del pronóstico</a></li>
+<li class="chapter" data-level="1.3" data-path="propuesta.html"><a href="propuesta.html#fuente-de-datos"><i class="fa fa-check"></i><b>1.3</b> Fuente de datos</a></li>
+<li class="chapter" data-level="1.4" data-path="propuesta.html"><a href="propuesta.html#consideraciones-finales"><i class="fa fa-check"></i><b>1.4</b> Consideraciones finales</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html"><i class="fa fa-check"></i><b>2</b> Estructura de las series de tiempo</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#variables-a-analizar"><i class="fa fa-check"></i><b>2.1</b> Variables a analizar</a></li>
+<li class="chapter" data-level="2.2" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#conjunto-de-datos"><i class="fa fa-check"></i><b>2.2</b> Conjunto de datos</a></li>
+<li class="chapter" data-level="2.3" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#series-tiempo"><i class="fa fa-check"></i><b>2.3</b> Series de tiempo</a></li>
+<li class="chapter" data-level="2.4" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#datos-faltantes"><i class="fa fa-check"></i><b>2.4</b> Datos faltantes</a></li>
+<li class="chapter" data-level="2.5" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#EDA"><i class="fa fa-check"></i><b>2.5</b> Análisis exploratorio</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#boxplots"><i class="fa fa-check"></i><b>2.5.1</b> Boxplots</a></li>
+<li class="chapter" data-level="2.5.2" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#histogramas"><i class="fa fa-check"></i><b>2.5.2</b> Histogramas</a></li>
+<li class="chapter" data-level="2.5.3" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#análisis-por-años"><i class="fa fa-check"></i><b>2.5.3</b> Análisis por años</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#observaciones-finales"><i class="fa fa-check"></i><b>2.6</b> Observaciones finales</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html"><i class="fa fa-check"></i><b>3</b> Preprocesamiento y visualización</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#medias-móviles"><i class="fa fa-check"></i><b>3.1</b> Medias móviles</a></li>
+<li class="chapter" data-level="3.2" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#descomposición"><i class="fa fa-check"></i><b>3.2</b> Descomposición</a></li>
+<li class="chapter" data-level="3.3" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#dickey-fuller-test"><i class="fa fa-check"></i><b>3.3</b> Dickey-Fuller Test</a></li>
+<li class="chapter" data-level="3.4" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#funciones-de-autocorrelación-acf-y-pacf"><i class="fa fa-check"></i><b>3.4</b> Funciones de autocorrelación (ACF y PACF)</a></li>
+<li class="chapter" data-level="3.5" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#rezagos"><i class="fa fa-check"></i><b>3.5</b> Rezagos</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="introducción-modelos-pronóstico.html"><a href="introducción-modelos-pronóstico.html"><i class="fa fa-check"></i><b>4</b> Introducción modelos pronóstico</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="introducción-modelos-pronóstico.html"><a href="introducción-modelos-pronóstico.html#tendencias-y-ciclos"><i class="fa fa-check"></i><b>4.1</b> Tendencias y ciclos</a></li>
+<li class="chapter" data-level="4.2" data-path="introducción-modelos-pronóstico.html"><a href="introducción-modelos-pronóstico.html#modelo-holt-winters"><i class="fa fa-check"></i><b>4.2</b> Modelo Holt-Winters</a></li>
+<li class="chapter" data-level="4.3" data-path="introducción-modelos-pronóstico.html"><a href="introducción-modelos-pronóstico.html#predicciones-iniciales"><i class="fa fa-check"></i><b>4.3</b> Predicciones iniciales</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html"><i class="fa fa-check"></i><b>5</b> Modelos estacionarios en series de tiempo</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#selección-de-series"><i class="fa fa-check"></i><b>5.1</b> Selección de series</a></li>
+<li class="chapter" data-level="5.2" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#puntos-de-cambio"><i class="fa fa-check"></i><b>5.2</b> Puntos de cambio</a></li>
+<li class="chapter" data-level="5.3" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#verificación-de-estacionariedad"><i class="fa fa-check"></i><b>5.3</b> Verificación de estacionariedad</a></li>
+<li class="chapter" data-level="5.4" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#funciones-de-acf-y-pact"><i class="fa fa-check"></i><b>5.4</b> Funciones de ACF y PACT</a></li>
+<li class="chapter" data-level="5.5" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#modelos-arima"><i class="fa fa-check"></i><b>5.5</b> Modelos ARIMA</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#predicciones-arima"><i class="fa fa-check"></i><b>5.5.1</b> Predicciones ARIMA</a></li>
+<li class="chapter" data-level="5.5.2" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#predicciones-forecast"><i class="fa fa-check"></i><b>5.5.2</b> Predicciones forecast</a></li>
+<li class="chapter" data-level="5.5.3" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#verificación-valores-atípicos"><i class="fa fa-check"></i><b>5.5.3</b> Verificación valores atípicos</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#observaciones-predicciones"><i class="fa fa-check"></i><b>5.6</b> Observaciones predicciones</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="regresión-en-series-de-tiempo.html"><a href="regresión-en-series-de-tiempo.html"><i class="fa fa-check"></i><b>6</b> Regresión en series de tiempo</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="regresión-en-series-de-tiempo.html"><a href="regresión-en-series-de-tiempo.html#selección-de-dataframes-para-regresión"><i class="fa fa-check"></i><b>6.1</b> Selección de dataframes para regresión</a></li>
+<li class="chapter" data-level="6.2" data-path="regresión-en-series-de-tiempo.html"><a href="regresión-en-series-de-tiempo.html#modelos-y-predicción-arima-ets-y-prophet"><i class="fa fa-check"></i><b>6.2</b> Modelos y predicción ARIMA, ETS y Prophet</a></li>
+<li class="chapter" data-level="6.3" data-path="regresión-en-series-de-tiempo.html"><a href="regresión-en-series-de-tiempo.html#comparación-de-modelos"><i class="fa fa-check"></i><b>6.3</b> Comparación de modelos</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="regresión-en-series-de-tiempo.html"><a href="regresión-en-series-de-tiempo.html#comparación-modelos-de-regresión-series-medellín"><i class="fa fa-check"></i><b>6.3.1</b> Comparación modelos de regresión series Medellín</a></li>
+<li class="chapter" data-level="6.3.2" data-path="regresión-en-series-de-tiempo.html"><a href="regresión-en-series-de-tiempo.html#comparación-modelos-de-regresión-series-valledupar"><i class="fa fa-check"></i><b>6.3.2</b> Comparación modelos de regresión series Valledupar</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Universidad Javeriana Cali<br />
+Maestría en Ciencia de Datos</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="regresión-en-series-de-tiempo" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Capítulo 6</span> Regresión en series de tiempo<a href="regresión-en-series-de-tiempo.html#regresión-en-series-de-tiempo" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>En el presente capítulo se aplica los modelos de regresión de series de tiempo como Prophet, ETS y ARIMA a la temperatura máxima diaria estudiada en el proyecto.</p>
+<div id="selección-de-dataframes-para-regresión" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Selección de dataframes para regresión<a href="regresión-en-series-de-tiempo.html#selección-de-dataframes-para-regresión" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Tal como se hizo en el capítulo anterior con Box-Jenkins para los <a href="modelos-estacionarios-en-series-de-tiempo.html#modelos-estacionarios-en-series-de-tiempo">Modelos estacionarios en series de tiempo</a>, se trabajará con los datos de la temperatura máxima diaria, nuevamente con los conjuntos de datos de Valledupar entre 2018 y 2019 y con los de Medellín entre 2022 y 2023.</p>
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="regresión-en-series-de-tiempo.html#cb259-1" tabindex="-1"></a><span class="co"># Serie xts Temperatura máxima diaria Valledupar 2018-2019</span></span>
+<span id="cb259-2"><a href="regresión-en-series-de-tiempo.html#cb259-2" tabindex="-1"></a>VUP_temp_2018_2019 <span class="ot">&lt;-</span> df_temp_max_ts[<span class="st">&quot;2018/2019&quot;</span>, <span class="st">&quot;VUP&quot;</span>]</span>
+<span id="cb259-3"><a href="regresión-en-series-de-tiempo.html#cb259-3" tabindex="-1"></a></span>
+<span id="cb259-4"><a href="regresión-en-series-de-tiempo.html#cb259-4" tabindex="-1"></a><span class="co"># Serie ts Temperatura máxima diaria Valledupar 2018-2019</span></span>
+<span id="cb259-5"><a href="regresión-en-series-de-tiempo.html#cb259-5" tabindex="-1"></a>VUP_temp_2018_2019_ts <span class="ot">&lt;-</span> <span class="fu">as.ts</span>(VUP_temp_2018_2019)</span>
+<span id="cb259-6"><a href="regresión-en-series-de-tiempo.html#cb259-6" tabindex="-1"></a></span>
+<span id="cb259-7"><a href="regresión-en-series-de-tiempo.html#cb259-7" tabindex="-1"></a><span class="co"># Serie xts Temperatura máxima diaria Medellín 2022-2023</span></span>
+<span id="cb259-8"><a href="regresión-en-series-de-tiempo.html#cb259-8" tabindex="-1"></a>MED_temp_2022_2023 <span class="ot">&lt;-</span> df_temp_max_ts[<span class="st">&quot;2022/2023&quot;</span>, <span class="st">&quot;MED&quot;</span>]</span>
+<span id="cb259-9"><a href="regresión-en-series-de-tiempo.html#cb259-9" tabindex="-1"></a></span>
+<span id="cb259-10"><a href="regresión-en-series-de-tiempo.html#cb259-10" tabindex="-1"></a><span class="co"># Serie ts Temperatura máxima diaria Medellín 2022-2023</span></span>
+<span id="cb259-11"><a href="regresión-en-series-de-tiempo.html#cb259-11" tabindex="-1"></a>MED_temp_2022_2023_ts <span class="ot">&lt;-</span> <span class="fu">as.ts</span>(MED_temp_2022_2023)</span></code></pre></div>
+<p>En el presente capítulo, se aplica el modelo Prophet a las series estudiadas en los capítulos anteriores, temperatura máxima de Valledupar y de Medellín. Con este motivo se realiza el cargue de las librerías a ser requeridas.</p>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="regresión-en-series-de-tiempo.html#cb260-1" tabindex="-1"></a><span class="co"># Librerías </span></span>
+<span id="cb260-2"><a href="regresión-en-series-de-tiempo.html#cb260-2" tabindex="-1"></a><span class="fu">library</span>(prophet)</span>
+<span id="cb260-3"><a href="regresión-en-series-de-tiempo.html#cb260-3" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb260-4"><a href="regresión-en-series-de-tiempo.html#cb260-4" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
+<p>Posterior a este cargue de las librerías, se obtienen las series de tiempo en la estructura de <em>dataframe</em> requerida para ser empleadas en el modelo de Prophet, adicionalmente ya que se desea realizar un comparativo con el modelo de predicción ARIMA y ETS se subdivide estos <em>datasets</em> en dos, uno para entrenamiento y otro para prueba.</p>
+<p>Primero se realiza el proceso de la transformación a <em>dataframe</em> de la serie de tiempo de Medellín:</p>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="regresión-en-series-de-tiempo.html#cb261-1" tabindex="-1"></a><span class="co"># Conversión serie temporal a dataframe para Medellín</span></span>
+<span id="cb261-2"><a href="regresión-en-series-de-tiempo.html#cb261-2" tabindex="-1"></a>dates_MED <span class="ot">&lt;-</span> <span class="fu">seq.Date</span>(<span class="at">from =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2022-01-01&quot;</span>), <span class="at">by =</span> <span class="st">&quot;day&quot;</span>, <span class="at">length.out =</span> <span class="fu">length</span>(MED_temp_2022_2023_ts))</span>
+<span id="cb261-3"><a href="regresión-en-series-de-tiempo.html#cb261-3" tabindex="-1"></a>MED_temp_2022_2023_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ds =</span> dates_MED, <span class="at">y =</span> <span class="fu">as.numeric</span>(MED_temp_2022_2023_ts))</span>
+<span id="cb261-4"><a href="regresión-en-series-de-tiempo.html#cb261-4" tabindex="-1"></a><span class="fu">head</span>(MED_temp_2022_2023_df)</span></code></pre></div>
+<pre><code>##           ds    y
+## 1 2022-01-01 27.4
+## 2 2022-01-02 26.4
+## 3 2022-01-03 27.8
+## 4 2022-01-04 28.0
+## 5 2022-01-05 28.2
+## 6 2022-01-06 26.0</code></pre>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="regresión-en-series-de-tiempo.html#cb263-1" tabindex="-1"></a><span class="fu">class</span>(MED_temp_2022_2023_df)</span></code></pre></div>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="regresión-en-series-de-tiempo.html#cb265-1" tabindex="-1"></a><span class="co"># Train / test serie de tiempo Medellín</span></span>
+<span id="cb265-2"><a href="regresión-en-series-de-tiempo.html#cb265-2" tabindex="-1"></a>split_date_MED <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="st">&quot;2023-11-01&quot;</span>)</span>
+<span id="cb265-3"><a href="regresión-en-series-de-tiempo.html#cb265-3" tabindex="-1"></a>train_df_MED <span class="ot">&lt;-</span> <span class="fu">subset</span>(MED_temp_2022_2023_df, ds <span class="sc">&lt;</span> split_date_MED)</span>
+<span id="cb265-4"><a href="regresión-en-series-de-tiempo.html#cb265-4" tabindex="-1"></a><span class="fu">head</span>(train_df_MED)</span></code></pre></div>
+<pre><code>##           ds    y
+## 1 2022-01-01 27.4
+## 2 2022-01-02 26.4
+## 3 2022-01-03 27.8
+## 4 2022-01-04 28.0
+## 5 2022-01-05 28.2
+## 6 2022-01-06 26.0</code></pre>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="regresión-en-series-de-tiempo.html#cb267-1" tabindex="-1"></a>test_df_MED <span class="ot">&lt;-</span> <span class="fu">subset</span>(MED_temp_2022_2023_df, ds <span class="sc">&gt;=</span> split_date_MED)</span>
+<span id="cb267-2"><a href="regresión-en-series-de-tiempo.html#cb267-2" tabindex="-1"></a><span class="fu">head</span>(test_df_MED)</span></code></pre></div>
+<pre><code>##             ds    y
+## 670 2023-11-01 25.8
+## 671 2023-11-02 27.6
+## 672 2023-11-03 27.6
+## 673 2023-11-04 27.8
+## 674 2023-11-05 28.4
+## 675 2023-11-06 24.8</code></pre>
+<p>A continuación se hace el mismo proceso para Valledupar:</p>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="regresión-en-series-de-tiempo.html#cb269-1" tabindex="-1"></a><span class="co"># Conversión serie temporal a dataframe para Valledupar</span></span>
+<span id="cb269-2"><a href="regresión-en-series-de-tiempo.html#cb269-2" tabindex="-1"></a>dates_VUP <span class="ot">&lt;-</span> <span class="fu">seq.Date</span>(<span class="at">from =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2018-01-01&quot;</span>), <span class="at">by =</span> <span class="st">&quot;day&quot;</span>, <span class="at">length.out =</span> <span class="fu">length</span>(VUP_temp_2018_2019_ts))</span>
+<span id="cb269-3"><a href="regresión-en-series-de-tiempo.html#cb269-3" tabindex="-1"></a>VUP_temp_2018_2019_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ds =</span> dates_VUP, <span class="at">y =</span> <span class="fu">as.numeric</span>(VUP_temp_2018_2019_ts))</span>
+<span id="cb269-4"><a href="regresión-en-series-de-tiempo.html#cb269-4" tabindex="-1"></a><span class="fu">head</span>(VUP_temp_2018_2019_df)</span></code></pre></div>
+<pre><code>##           ds    y
+## 1 2018-01-01 34.2
+## 2 2018-01-02 32.3
+## 3 2018-01-03 33.5
+## 4 2018-01-04 33.4
+## 5 2018-01-05 32.8
+## 6 2018-01-06 34.2</code></pre>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="regresión-en-series-de-tiempo.html#cb271-1" tabindex="-1"></a><span class="fu">class</span>(VUP_temp_2018_2019_df)</span></code></pre></div>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="regresión-en-series-de-tiempo.html#cb273-1" tabindex="-1"></a><span class="co"># Train / test serie de tiempo Valledupar</span></span>
+<span id="cb273-2"><a href="regresión-en-series-de-tiempo.html#cb273-2" tabindex="-1"></a>split_date_VUP <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="st">&quot;2019-11-01&quot;</span>)</span>
+<span id="cb273-3"><a href="regresión-en-series-de-tiempo.html#cb273-3" tabindex="-1"></a>train_df_VUP <span class="ot">&lt;-</span> <span class="fu">subset</span>(VUP_temp_2018_2019_df, ds <span class="sc">&lt;</span> split_date_VUP)</span>
+<span id="cb273-4"><a href="regresión-en-series-de-tiempo.html#cb273-4" tabindex="-1"></a><span class="fu">head</span>(train_df_VUP)</span></code></pre></div>
+<pre><code>##           ds    y
+## 1 2018-01-01 34.2
+## 2 2018-01-02 32.3
+## 3 2018-01-03 33.5
+## 4 2018-01-04 33.4
+## 5 2018-01-05 32.8
+## 6 2018-01-06 34.2</code></pre>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="regresión-en-series-de-tiempo.html#cb275-1" tabindex="-1"></a>test_df_VUP <span class="ot">&lt;-</span> <span class="fu">subset</span>(VUP_temp_2018_2019_df, ds <span class="sc">&gt;=</span> split_date_VUP)</span>
+<span id="cb275-2"><a href="regresión-en-series-de-tiempo.html#cb275-2" tabindex="-1"></a><span class="fu">head</span>(test_df_VUP)</span></code></pre></div>
+<pre><code>##             ds    y
+## 670 2019-11-01 35.0
+## 671 2019-11-02 33.6
+## 672 2019-11-03 35.2
+## 673 2019-11-04 35.1
+## 674 2019-11-05 35.4
+## 675 2019-11-06 36.2</code></pre>
+</div>
+<div id="modelos-y-predicción-arima-ets-y-prophet" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Modelos y predicción ARIMA, ETS y Prophet<a href="regresión-en-series-de-tiempo.html#modelos-y-predicción-arima-ets-y-prophet" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A continuación se generan los modelos por las tres metodologías de ARIMA, ETS y Prophet para ambos casos, temperatura máxima de Medellín y de Valledupar. En primer lugar se corren los modelos para los datos de Medellín:</p>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="regresión-en-series-de-tiempo.html#cb277-1" tabindex="-1"></a><span class="co"># ARIMA model</span></span>
+<span id="cb277-2"><a href="regresión-en-series-de-tiempo.html#cb277-2" tabindex="-1"></a>arima_model_MED <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(train_df_MED<span class="sc">$</span>y)</span>
+<span id="cb277-3"><a href="regresión-en-series-de-tiempo.html#cb277-3" tabindex="-1"></a>forecast_arima_MED <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_MED, <span class="at">h =</span> <span class="fu">nrow</span>(test_df_MED))</span>
+<span id="cb277-4"><a href="regresión-en-series-de-tiempo.html#cb277-4" tabindex="-1"></a></span>
+<span id="cb277-5"><a href="regresión-en-series-de-tiempo.html#cb277-5" tabindex="-1"></a><span class="co"># ETS model</span></span>
+<span id="cb277-6"><a href="regresión-en-series-de-tiempo.html#cb277-6" tabindex="-1"></a>ets_model_MED <span class="ot">&lt;-</span> <span class="fu">ets</span>(train_df_MED<span class="sc">$</span>y)</span>
+<span id="cb277-7"><a href="regresión-en-series-de-tiempo.html#cb277-7" tabindex="-1"></a>forecast_ets_MED <span class="ot">&lt;-</span> <span class="fu">forecast</span>(ets_model_MED, <span class="at">h =</span> <span class="fu">nrow</span>(test_df_MED))</span>
+<span id="cb277-8"><a href="regresión-en-series-de-tiempo.html#cb277-8" tabindex="-1"></a></span>
+<span id="cb277-9"><a href="regresión-en-series-de-tiempo.html#cb277-9" tabindex="-1"></a><span class="co"># Prophet model</span></span>
+<span id="cb277-10"><a href="regresión-en-series-de-tiempo.html#cb277-10" tabindex="-1"></a>model_pp_MED <span class="ot">&lt;-</span> <span class="fu">prophet</span>(train_df_MED, <span class="at">yearly.seasonality =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb277-11"><a href="regresión-en-series-de-tiempo.html#cb277-11" tabindex="-1"></a>future_dates_MED <span class="ot">&lt;-</span> <span class="fu">make_future_dataframe</span>(model_pp_MED, <span class="at">periods =</span> <span class="fu">nrow</span>(test_df_MED))</span>
+<span id="cb277-12"><a href="regresión-en-series-de-tiempo.html#cb277-12" tabindex="-1"></a>forecast_prophet_MED <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_pp_MED, future_dates_MED)</span></code></pre></div>
+<p>A continuación se realiza el <code>plot</code> de los resultados de Prophet de Medellín:</p>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="regresión-en-series-de-tiempo.html#cb278-1" tabindex="-1"></a><span class="co"># Plot de la predicción</span></span>
+<span id="cb278-2"><a href="regresión-en-series-de-tiempo.html#cb278-2" tabindex="-1"></a><span class="fu">plot</span>(model_pp_MED, forecast_prophet_MED)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-102-1.png" width="672" /></p>
+<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb279-1"><a href="regresión-en-series-de-tiempo.html#cb279-1" tabindex="-1"></a><span class="co"># Plot de los componentes (tendencia, estacionalidad, etc.)</span></span>
+<span id="cb279-2"><a href="regresión-en-series-de-tiempo.html#cb279-2" tabindex="-1"></a><span class="fu">prophet_plot_components</span>(model_pp_MED, forecast_prophet_MED)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-102-2.png" width="672" /></p>
+<p>En los gráficos previos se observa que la tendencia para la ciudad de Medellín es presentar un aumento de temperatura para los últimos meses del año y el primer mes de enero. También se observa una tendencia en los días de la semana a que el viernes este ligeramente por encima de la media, y en el comportamiento del año que los meses de julio, agosto y septiembre tienden a ser mas cálidos y el final de año posterior a mediados de octubre más fríos.</p>
+<p>Ahora a continuación se realiza el mismo proceso para Valledupar:</p>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="regresión-en-series-de-tiempo.html#cb280-1" tabindex="-1"></a><span class="co"># Prophet model</span></span>
+<span id="cb280-2"><a href="regresión-en-series-de-tiempo.html#cb280-2" tabindex="-1"></a>model_pp_VUP <span class="ot">&lt;-</span> <span class="fu">prophet</span>(train_df_VUP, <span class="at">yearly.seasonality =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb280-3"><a href="regresión-en-series-de-tiempo.html#cb280-3" tabindex="-1"></a>future_dates_VUP <span class="ot">&lt;-</span> <span class="fu">make_future_dataframe</span>(model_pp_VUP, <span class="at">periods =</span> <span class="fu">nrow</span>(test_df_VUP))</span>
+<span id="cb280-4"><a href="regresión-en-series-de-tiempo.html#cb280-4" tabindex="-1"></a>forecast_prophet_VUP <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_pp_VUP, future_dates_VUP)</span>
+<span id="cb280-5"><a href="regresión-en-series-de-tiempo.html#cb280-5" tabindex="-1"></a></span>
+<span id="cb280-6"><a href="regresión-en-series-de-tiempo.html#cb280-6" tabindex="-1"></a><span class="co"># ARIMA model</span></span>
+<span id="cb280-7"><a href="regresión-en-series-de-tiempo.html#cb280-7" tabindex="-1"></a>arima_model_VUP <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(train_df_VUP<span class="sc">$</span>y)</span>
+<span id="cb280-8"><a href="regresión-en-series-de-tiempo.html#cb280-8" tabindex="-1"></a>forecast_arima_VUP <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_VUP, <span class="at">h =</span> <span class="fu">nrow</span>(test_df_VUP))</span>
+<span id="cb280-9"><a href="regresión-en-series-de-tiempo.html#cb280-9" tabindex="-1"></a></span>
+<span id="cb280-10"><a href="regresión-en-series-de-tiempo.html#cb280-10" tabindex="-1"></a><span class="co"># ETS model</span></span>
+<span id="cb280-11"><a href="regresión-en-series-de-tiempo.html#cb280-11" tabindex="-1"></a>ets_model_VUP <span class="ot">&lt;-</span> <span class="fu">ets</span>(train_df_VUP<span class="sc">$</span>y)</span>
+<span id="cb280-12"><a href="regresión-en-series-de-tiempo.html#cb280-12" tabindex="-1"></a>forecast_ets_VUP <span class="ot">&lt;-</span> <span class="fu">forecast</span>(ets_model_VUP, <span class="at">h =</span> <span class="fu">nrow</span>(test_df_VUP))</span></code></pre></div>
+<p>Y por último se procede con la gráficas de los resultados para Valledupar de Prophet:</p>
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="regresión-en-series-de-tiempo.html#cb281-1" tabindex="-1"></a><span class="co"># Plot de la predicción</span></span>
+<span id="cb281-2"><a href="regresión-en-series-de-tiempo.html#cb281-2" tabindex="-1"></a><span class="fu">plot</span>(model_pp_VUP, forecast_prophet_VUP)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-104-1.png" width="672" /></p>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="regresión-en-series-de-tiempo.html#cb282-1" tabindex="-1"></a><span class="co"># Plot de los componentes (tendencia, estacionalidad, etc.)</span></span>
+<span id="cb282-2"><a href="regresión-en-series-de-tiempo.html#cb282-2" tabindex="-1"></a><span class="fu">prophet_plot_components</span>(model_pp_VUP, forecast_prophet_VUP)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-104-2.png" width="672" /></p>
+<p>Se identifica que marzo-abril y julio-agosto son los periodos con temperaturas más altas mientras que las más bajas se encuentran en mayo-junio y septiembre-octubre, por otro lado el patrón semanal nos indica que los domingos y lunes son los días con las temperaturas más altas y que los martes y viernes la temperatura tiende a descender.</p>
+</div>
+<div id="comparación-de-modelos" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Comparación de modelos<a href="regresión-en-series-de-tiempo.html#comparación-de-modelos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A continuación se realiza un comparativo de los tres modelos aplicados (ARIMA, ETS y Prophet) empleando diferentes métricas y de manera gráfica su predicción versus los valores reales del subconjunto de prueba. Las métricas utilizadas para la comparación de los modelos son las siguientes:</p>
+<ol style="list-style-type: decimal">
+<li><p>Error Medio (ME):Indica si las predicciones están sesgadas. Un valor cercano a 0 es ideal. Los valores positivos sugieren sobreestimación, mientras que los valores negativos sugieren subestimación.</p></li>
+<li><p>Error Cuadrático Medio (RMSE): Proporciona una medida de la magnitud media del error, es sensible a grandes errores debidos a la cuadratura y los valores más bajos indican un mejor rendimiento del modelo.</p></li>
+<li><p>Error Absoluto Medio (MAE): Mide la magnitud media de los errores en un conjunto de predicciones, sin tener en cuenta su dirección. Los valores más bajos indican un mejor rendimiento del modelo.</p></li>
+<li><p>Error Porcentual Medio (MPE): Indica el porcentaje promedio en que las predicciones se desvían de los valores reales, los valores positivos indican sobreestimación, mientras que los valores negativos indican subestimación. Un valor cercano a 0 es ideal.</p></li>
+<li><p>Error Porcentual Medio Absoluto (AMPE): Similar a la MPE pero considera valores absolutos, proporcionando una medida de la magnitud promedio de los errores porcentuales. Los valores más bajos indican un mejor rendimiento del modelo.</p></li>
+<li><p>Error Absoluto Medio Escalado (MASE): Proporciona una medida estandarizada de la precisión de la previsión, los valores superiores a 1 indican un peor rendimiento.</p></li>
+<li><p>Error de escala cuadrática media (RMSSE): Similar a RMSE pero escalado para proporcionar una medida relativa, los valores inferiores a 1 indican un mejor rendimiento, mientras que los valores superiores a 1 indican un rendimiento peor.</p></li>
+<li><p>Primera Autocorrelación de Residuos (ACF1): Mide la correlación entre los residuos que están separados por un paso de tiempo. Los valores cercanos a 0 indican que no hay correlación (ideal). Los valores positivos o negativos significativos sugieren que hay un patrón en los residuos que el modelo no ha capturado, lo que indica un problema potencial con el modelo.</p></li>
+</ol>
+<div id="comparación-modelos-de-regresión-series-medellín" class="section level3 hasAnchor" number="6.3.1">
+<h3><span class="header-section-number">6.3.1</span> Comparación modelos de regresión series Medellín<a href="regresión-en-series-de-tiempo.html#comparación-modelos-de-regresión-series-medellín" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A continuación, se realiza la comparación de las métricas para los modelos aplicados a las series de temperatura máxima diaria en Medellín:</p>
+<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb283-1"><a href="regresión-en-series-de-tiempo.html#cb283-1" tabindex="-1"></a><span class="co"># Combinación de datos de los modelos de Medellín</span></span>
+<span id="cb283-2"><a href="regresión-en-series-de-tiempo.html#cb283-2" tabindex="-1"></a>test_df_MED<span class="sc">$</span>prophet <span class="ot">&lt;-</span> <span class="fu">subset</span>(forecast_prophet_MED, ds <span class="sc">&gt;=</span> split_date_MED)<span class="sc">$</span>yhat</span>
+<span id="cb283-3"><a href="regresión-en-series-de-tiempo.html#cb283-3" tabindex="-1"></a>test_df_MED<span class="sc">$</span>arima <span class="ot">&lt;-</span> forecast_arima_MED<span class="sc">$</span>mean</span>
+<span id="cb283-4"><a href="regresión-en-series-de-tiempo.html#cb283-4" tabindex="-1"></a>test_df_MED<span class="sc">$</span>ets <span class="ot">&lt;-</span> forecast_ets_MED<span class="sc">$</span>mean</span>
+<span id="cb283-5"><a href="regresión-en-series-de-tiempo.html#cb283-5" tabindex="-1"></a><span class="fu">head</span>(test_df_MED)</span></code></pre></div>
+<pre><code>##             ds    y  prophet    arima      ets
+## 670 2023-11-01 25.8 28.34104 27.26849 26.70883
+## 671 2023-11-02 27.6 28.43765 27.61000 26.70883
+## 672 2023-11-03 27.6 28.60107 27.38576 26.70883
+## 673 2023-11-04 27.8 28.58800 27.63800 26.70883
+## 674 2023-11-05 28.4 28.44242 27.40660 26.70883
+## 675 2023-11-06 24.8 28.69731 27.63411 26.70883</code></pre>
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb285-1"><a href="regresión-en-series-de-tiempo.html#cb285-1" tabindex="-1"></a><span class="co"># Función para el cálculo de métricas de evaluación</span></span>
+<span id="cb285-2"><a href="regresión-en-series-de-tiempo.html#cb285-2" tabindex="-1"></a>compute_metrics <span class="ot">&lt;-</span> <span class="cf">function</span>(actual, predicted) {</span>
+<span id="cb285-3"><a href="regresión-en-series-de-tiempo.html#cb285-3" tabindex="-1"></a>  res <span class="ot">&lt;-</span> actual <span class="sc">-</span> predicted</span>
+<span id="cb285-4"><a href="regresión-en-series-de-tiempo.html#cb285-4" tabindex="-1"></a>  me <span class="ot">&lt;-</span> <span class="fu">mean</span>(res, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb285-5"><a href="regresión-en-series-de-tiempo.html#cb285-5" tabindex="-1"></a>  rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(res<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb285-6"><a href="regresión-en-series-de-tiempo.html#cb285-6" tabindex="-1"></a>  mae <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(res), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb285-7"><a href="regresión-en-series-de-tiempo.html#cb285-7" tabindex="-1"></a>  mpe <span class="ot">&lt;-</span> <span class="fu">mean</span>(res <span class="sc">/</span> actual <span class="sc">*</span> <span class="dv">100</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb285-8"><a href="regresión-en-series-de-tiempo.html#cb285-8" tabindex="-1"></a>  ampe <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(res <span class="sc">/</span> actual <span class="sc">*</span> <span class="dv">100</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb285-9"><a href="regresión-en-series-de-tiempo.html#cb285-9" tabindex="-1"></a>  mase <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(res), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="fu">mean</span>(<span class="fu">abs</span>(<span class="fu">diff</span>(actual)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb285-10"><a href="regresión-en-series-de-tiempo.html#cb285-10" tabindex="-1"></a>  rmsse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(res<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">/</span> <span class="fu">mean</span>(<span class="fu">abs</span>(<span class="fu">diff</span>(actual)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb285-11"><a href="regresión-en-series-de-tiempo.html#cb285-11" tabindex="-1"></a>  acf1 <span class="ot">&lt;-</span> <span class="fu">acf</span>(res, <span class="at">plot =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>acf[<span class="dv">2</span>]</span>
+<span id="cb285-12"><a href="regresión-en-series-de-tiempo.html#cb285-12" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">ME =</span> me, <span class="at">RMSE =</span> rmse, <span class="at">MAE =</span> mae, <span class="at">MPE =</span> mpe, <span class="at">AMPE =</span> ampe, <span class="at">MASE =</span> mase, <span class="at">RMSSE =</span> rmsse, <span class="at">ACF1 =</span> acf1)</span>
+<span id="cb285-13"><a href="regresión-en-series-de-tiempo.html#cb285-13" tabindex="-1"></a>}</span>
+<span id="cb285-14"><a href="regresión-en-series-de-tiempo.html#cb285-14" tabindex="-1"></a></span>
+<span id="cb285-15"><a href="regresión-en-series-de-tiempo.html#cb285-15" tabindex="-1"></a><span class="co"># Cálculo de métricas para cada modelo</span></span>
+<span id="cb285-16"><a href="regresión-en-series-de-tiempo.html#cb285-16" tabindex="-1"></a>metrics_prophet_MED <span class="ot">&lt;-</span> <span class="fu">compute_metrics</span>(test_df_MED<span class="sc">$</span>y, test_df_MED<span class="sc">$</span>prophet)</span>
+<span id="cb285-17"><a href="regresión-en-series-de-tiempo.html#cb285-17" tabindex="-1"></a>metrics_arima_MED <span class="ot">&lt;-</span> <span class="fu">compute_metrics</span>(test_df_MED<span class="sc">$</span>y, test_df_MED<span class="sc">$</span>arima)</span>
+<span id="cb285-18"><a href="regresión-en-series-de-tiempo.html#cb285-18" tabindex="-1"></a>metrics_ets_MED <span class="ot">&lt;-</span> <span class="fu">compute_metrics</span>(test_df_MED<span class="sc">$</span>y, test_df_MED<span class="sc">$</span>ets)</span>
+<span id="cb285-19"><a href="regresión-en-series-de-tiempo.html#cb285-19" tabindex="-1"></a></span>
+<span id="cb285-20"><a href="regresión-en-series-de-tiempo.html#cb285-20" tabindex="-1"></a><span class="co"># Combinación y unificación de métricas de Medellín</span></span>
+<span id="cb285-21"><a href="regresión-en-series-de-tiempo.html#cb285-21" tabindex="-1"></a>metrics_MED <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="at">Prophet =</span> metrics_prophet_MED, <span class="at">ARIMA =</span> metrics_arima_MED, <span class="at">ETS =</span> metrics_ets_MED)</span>
+<span id="cb285-22"><a href="regresión-en-series-de-tiempo.html#cb285-22" tabindex="-1"></a><span class="fu">print</span>(metrics_MED)</span></code></pre></div>
+<pre><code>##                ME     RMSE      MAE      MPE     AMPE     MASE    RMSSE
+## Prophet 0.1830859 1.603680 1.296882 0.358884 4.545174 1.161387 1.436132
+## ARIMA   1.2857585 1.947514 1.695758 4.208750 5.786602 1.518589 1.744042
+## ETS     2.0960869 2.555345 2.252212 7.029252 7.640196 2.016906 2.288368
+##              ACF1
+## Prophet 0.3257538
+## ARIMA   0.2060925
+## ETS     0.1986656</code></pre>
+<p>En la tabla anterior se observa el comparativo de los tres modelos para el caso de Medellín, en donde se observa que para todas las métricas el mejor desempeño fue obtenido en el modelo Prophet y viendo el ACF1 se observa que este mismo modelo presenta una mayor correlación de los datos frente a los otros dos modelos. Este mejor desempeño se observa a continuación en el gráfico donde se comparan frente a los datos de prueba / test observando que Prophet captura un comportamiento similar en los últimos 15 días del año sin embargo no se encuentra tan cerca en el resto de las fechas del periodo que estaba siendo probado.</p>
+<div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb287-1"><a href="regresión-en-series-de-tiempo.html#cb287-1" tabindex="-1"></a><span class="co"># Plot actual vs predicted values - MEDELLÍN</span></span>
+<span id="cb287-2"><a href="regresión-en-series-de-tiempo.html#cb287-2" tabindex="-1"></a><span class="fu">ggplot</span>(test_df_MED, <span class="fu">aes</span>(<span class="at">x =</span> ds)) <span class="sc">+</span></span>
+<span id="cb287-3"><a href="regresión-en-series-de-tiempo.html#cb287-3" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> y, <span class="at">color =</span> <span class="st">&quot;Real&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb287-4"><a href="regresión-en-series-de-tiempo.html#cb287-4" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> prophet, <span class="at">color =</span> <span class="st">&quot;Prophet&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb287-5"><a href="regresión-en-series-de-tiempo.html#cb287-5" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> arima, <span class="at">color =</span> <span class="st">&quot;ARIMA&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb287-6"><a href="regresión-en-series-de-tiempo.html#cb287-6" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> ets, <span class="at">color =</span> <span class="st">&quot;ETS&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb287-7"><a href="regresión-en-series-de-tiempo.html#cb287-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Comparación predicciones Temperatura Máxima Diaria Medellín&quot;</span>,</span>
+<span id="cb287-8"><a href="regresión-en-series-de-tiempo.html#cb287-8" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Fecha&quot;</span>,</span>
+<span id="cb287-9"><a href="regresión-en-series-de-tiempo.html#cb287-9" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Temperatura [ºC]&quot;</span>) <span class="sc">+</span></span>
+<span id="cb287-10"><a href="regresión-en-series-de-tiempo.html#cb287-10" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;Real&quot;</span> <span class="ot">=</span> <span class="st">&quot;black&quot;</span>, <span class="st">&quot;Prophet&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>, <span class="st">&quot;ARIMA&quot;</span> <span class="ot">=</span> <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;ETS&quot;</span> <span class="ot">=</span> <span class="st">&quot;green&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb287-11"><a href="regresión-en-series-de-tiempo.html#cb287-11" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-106-1.png" width="672" /></p>
+</div>
+<div id="comparación-modelos-de-regresión-series-valledupar" class="section level3 hasAnchor" number="6.3.2">
+<h3><span class="header-section-number">6.3.2</span> Comparación modelos de regresión series Valledupar<a href="regresión-en-series-de-tiempo.html#comparación-modelos-de-regresión-series-valledupar" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Para finalizar, se realiza la comparación de las métricas para los modelos para Valledupar:</p>
+<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb288-1"><a href="regresión-en-series-de-tiempo.html#cb288-1" tabindex="-1"></a><span class="co"># Combinación de datos de los modelos para Valledupar</span></span>
+<span id="cb288-2"><a href="regresión-en-series-de-tiempo.html#cb288-2" tabindex="-1"></a>test_df_VUP<span class="sc">$</span>prophet <span class="ot">&lt;-</span> <span class="fu">subset</span>(forecast_prophet_VUP, ds <span class="sc">&gt;=</span> split_date_VUP)<span class="sc">$</span>yhat</span>
+<span id="cb288-3"><a href="regresión-en-series-de-tiempo.html#cb288-3" tabindex="-1"></a>test_df_VUP<span class="sc">$</span>arima <span class="ot">&lt;-</span> forecast_arima_VUP<span class="sc">$</span>mean</span>
+<span id="cb288-4"><a href="regresión-en-series-de-tiempo.html#cb288-4" tabindex="-1"></a>test_df_VUP<span class="sc">$</span>ets <span class="ot">&lt;-</span> forecast_ets_VUP<span class="sc">$</span>mean</span>
+<span id="cb288-5"><a href="regresión-en-series-de-tiempo.html#cb288-5" tabindex="-1"></a><span class="fu">head</span>(test_df_VUP)</span></code></pre></div>
+<pre><code>##             ds    y  prophet    arima      ets
+## 670 2019-11-01 35.0 33.97603 34.55304 34.41536
+## 671 2019-11-02 33.6 34.27769 34.43133 34.41536
+## 672 2019-11-03 35.2 34.75155 34.35656 34.41536
+## 673 2019-11-04 35.1 34.89614 34.34395 34.41536
+## 674 2019-11-05 35.4 34.53094 34.35418 34.41536
+## 675 2019-11-06 36.2 34.80896 34.37653 34.41536</code></pre>
+<div class="sourceCode" id="cb290"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb290-1"><a href="regresión-en-series-de-tiempo.html#cb290-1" tabindex="-1"></a><span class="co"># Cálculo de métricas para cada modelo</span></span>
+<span id="cb290-2"><a href="regresión-en-series-de-tiempo.html#cb290-2" tabindex="-1"></a>metrics_prophet_VUP <span class="ot">&lt;-</span> <span class="fu">compute_metrics</span>(test_df_VUP<span class="sc">$</span>y, test_df_VUP<span class="sc">$</span>prophet)</span>
+<span id="cb290-3"><a href="regresión-en-series-de-tiempo.html#cb290-3" tabindex="-1"></a>metrics_arima_VUP <span class="ot">&lt;-</span> <span class="fu">compute_metrics</span>(test_df_VUP<span class="sc">$</span>y, test_df_VUP<span class="sc">$</span>arima)</span>
+<span id="cb290-4"><a href="regresión-en-series-de-tiempo.html#cb290-4" tabindex="-1"></a>metrics_ets_VUP <span class="ot">&lt;-</span> <span class="fu">compute_metrics</span>(test_df_VUP<span class="sc">$</span>y, test_df_VUP<span class="sc">$</span>ets)</span>
+<span id="cb290-5"><a href="regresión-en-series-de-tiempo.html#cb290-5" tabindex="-1"></a></span>
+<span id="cb290-6"><a href="regresión-en-series-de-tiempo.html#cb290-6" tabindex="-1"></a><span class="co"># Combinación y unificación de métricas de Valledupar</span></span>
+<span id="cb290-7"><a href="regresión-en-series-de-tiempo.html#cb290-7" tabindex="-1"></a>metrics_VUP <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="at">Prophet =</span> metrics_prophet_VUP, <span class="at">ARIMA =</span> metrics_arima_VUP, <span class="at">ETS =</span> metrics_ets_VUP)</span>
+<span id="cb290-8"><a href="regresión-en-series-de-tiempo.html#cb290-8" tabindex="-1"></a><span class="fu">print</span>(metrics_VUP)</span></code></pre></div>
+<pre><code>##                 ME     RMSE       MAE        MPE     AMPE     MASE    RMSSE
+## Prophet -0.3883868 1.090324 0.8334614 -1.1884917 2.424614 0.934723 1.222793
+## ARIMA    0.2114671 1.041588 0.9070104  0.5128322 2.594356 1.017208 1.168136
+## ETS      0.6764467 1.292971 1.1299008  1.8289272 3.196235 1.267178 1.450061
+##              ACF1
+## Prophet 0.2544594
+## ARIMA   0.3004797
+## ETS     0.3934205</code></pre>
+<p>De los tres modelos evaluados (Prophet, ARIMA, y ETS) de la temperatura de Valledupar, Prophet parece ofrecer un buen equilibrio en términos de precisión y sesgo. Aunque ARIMA tiene un RMSE y ME ligeramente mejores que Prophet, la diferencia es mínima y Prophet tiene un AMPE inferior, lo que indica una menor variabilidad en los errores porcentuales. Adicionalmente en el gráfico de Valledupar se logra observar un mejor ajuste que el modelo evaluado para Medellín al mantener los datos reales de prueba cercanos a la predicción.</p>
+<p>El modelo ETS tiene los peores resultados en todas las métricas evaluadas, indicando que no es adecuado para este conjunto de datos en comparación con Prophet y ARIMA.</p>
+<div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb292-1"><a href="regresión-en-series-de-tiempo.html#cb292-1" tabindex="-1"></a><span class="co"># Plot actual vs predicted values - Valledupar</span></span>
+<span id="cb292-2"><a href="regresión-en-series-de-tiempo.html#cb292-2" tabindex="-1"></a><span class="fu">ggplot</span>(test_df_VUP, <span class="fu">aes</span>(<span class="at">x =</span> ds)) <span class="sc">+</span></span>
+<span id="cb292-3"><a href="regresión-en-series-de-tiempo.html#cb292-3" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> y, <span class="at">color =</span> <span class="st">&quot;Real&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb292-4"><a href="regresión-en-series-de-tiempo.html#cb292-4" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> prophet, <span class="at">color =</span> <span class="st">&quot;Prophet&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb292-5"><a href="regresión-en-series-de-tiempo.html#cb292-5" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> arima, <span class="at">color =</span> <span class="st">&quot;ARIMA&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb292-6"><a href="regresión-en-series-de-tiempo.html#cb292-6" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> ets, <span class="at">color =</span> <span class="st">&quot;ETS&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb292-7"><a href="regresión-en-series-de-tiempo.html#cb292-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Comparación predicciones Temperatura Máxima Diaria Valledupar&quot;</span>,</span>
+<span id="cb292-8"><a href="regresión-en-series-de-tiempo.html#cb292-8" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Fecha&quot;</span>,</span>
+<span id="cb292-9"><a href="regresión-en-series-de-tiempo.html#cb292-9" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Temperatura [ºC]&quot;</span>) <span class="sc">+</span></span>
+<span id="cb292-10"><a href="regresión-en-series-de-tiempo.html#cb292-10" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;Real&quot;</span> <span class="ot">=</span> <span class="st">&quot;black&quot;</span>, <span class="st">&quot;Prophet&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>, <span class="st">&quot;ARIMA&quot;</span> <span class="ot">=</span> <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;ETS&quot;</span> <span class="ot">=</span> <span class="st">&quot;green&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb292-11"><a href="regresión-en-series-de-tiempo.html#cb292-11" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-108-1.png" width="672" /></p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="modelos-estacionarios-en-series-de-tiempo.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="referencias.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

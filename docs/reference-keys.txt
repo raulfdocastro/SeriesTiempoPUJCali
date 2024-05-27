@@ -36,3 +36,9 @@ cálculos-residuales
 predicciones-forecast
 verificación-valores-atípicos
 observaciones-predicciones
+regresión-en-series-de-tiempo
+selección-de-dataframes-para-regresión
+modelos-y-predicción-arima-ets-y-prophet
+comparación-de-modelos
+comparación-modelos-de-regresión-series-medellín
+comparación-modelos-de-regresión-series-valledupar
