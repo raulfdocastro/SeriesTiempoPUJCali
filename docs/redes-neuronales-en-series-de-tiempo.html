@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 7 Redes neuronales en series de tiempo | Universidad Javeriana Cali Maestría en Ciencia de Datos</title>
+  <meta name="description" content="Libro en Bookdown para la asignatura Análisis de Series de Tiempo - 20241 - B" />
+  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 7 Redes neuronales en series de tiempo | Universidad Javeriana Cali Maestría en Ciencia de Datos" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Libro en Bookdown para la asignatura Análisis de Series de Tiempo - 20241 - B" />
+  <meta name="github-repo" content="raulfdocastro/SeriesTiempoPUJCali" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 7 Redes neuronales en series de tiempo | Universidad Javeriana Cali Maestría en Ciencia de Datos" />
+  
+  <meta name="twitter:description" content="Libro en Bookdown para la asignatura Análisis de Series de Tiempo - 20241 - B" />
+  
+
+<meta name="author" content="Joan Sebastián García Villa" />
+<meta name="author" content="Laura Yohanna Bermúdez Murillo" />
+<meta name="author" content="Raúl Fernando Castro Suárez" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="regresión-en-series-de-tiempo.html"/>
+<link rel="next" href="referencias.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/dygraphs-1.1.1/dygraph.css" rel="stylesheet" />
+<script src="libs/dygraphs-1.1.1/dygraph-combined.js"></script>
+<script src="libs/dygraphs-1.1.1/shapes.js"></script>
+<script src="libs/moment-2.8.4/moment.js"></script>
+<script src="libs/moment-timezone-0.2.5/moment-timezone-with-data.js"></script>
+<script src="libs/moment-fquarter-1.0.0/moment-fquarter.min.js"></script>
+<script src="libs/dygraphs-binding-1.1.1.6/dygraphs.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="propuesta.html"><a href="propuesta.html"><i class="fa fa-check"></i><b>1</b> Propuesta Bookdown Grupo 7</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="propuesta.html"><a href="propuesta.html#tipo-de-datos"><i class="fa fa-check"></i><b>1.1</b> Tipo de datos</a></li>
+<li class="chapter" data-level="1.2" data-path="propuesta.html"><a href="propuesta.html#importancia-del-pronóstico"><i class="fa fa-check"></i><b>1.2</b> Importancia del pronóstico</a></li>
+<li class="chapter" data-level="1.3" data-path="propuesta.html"><a href="propuesta.html#fuente-de-datos"><i class="fa fa-check"></i><b>1.3</b> Fuente de datos</a></li>
+<li class="chapter" data-level="1.4" data-path="propuesta.html"><a href="propuesta.html#consideraciones-finales"><i class="fa fa-check"></i><b>1.4</b> Consideraciones finales</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html"><i class="fa fa-check"></i><b>2</b> Estructura de las series de tiempo</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#variables-a-analizar"><i class="fa fa-check"></i><b>2.1</b> Variables a analizar</a></li>
+<li class="chapter" data-level="2.2" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#conjunto-de-datos"><i class="fa fa-check"></i><b>2.2</b> Conjunto de datos</a></li>
+<li class="chapter" data-level="2.3" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#series-tiempo"><i class="fa fa-check"></i><b>2.3</b> Series de tiempo</a></li>
+<li class="chapter" data-level="2.4" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#datos-faltantes"><i class="fa fa-check"></i><b>2.4</b> Datos faltantes</a></li>
+<li class="chapter" data-level="2.5" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#EDA"><i class="fa fa-check"></i><b>2.5</b> Análisis exploratorio</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#boxplots"><i class="fa fa-check"></i><b>2.5.1</b> Boxplots</a></li>
+<li class="chapter" data-level="2.5.2" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#histogramas"><i class="fa fa-check"></i><b>2.5.2</b> Histogramas</a></li>
+<li class="chapter" data-level="2.5.3" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#análisis-por-años"><i class="fa fa-check"></i><b>2.5.3</b> Análisis por años</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="estructura-de-las-series-de-tiempo.html"><a href="estructura-de-las-series-de-tiempo.html#observaciones-finales"><i class="fa fa-check"></i><b>2.6</b> Observaciones finales</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html"><i class="fa fa-check"></i><b>3</b> Preprocesamiento y visualización</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#medias-móviles"><i class="fa fa-check"></i><b>3.1</b> Medias móviles</a></li>
+<li class="chapter" data-level="3.2" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#descomposición"><i class="fa fa-check"></i><b>3.2</b> Descomposición</a></li>
+<li class="chapter" data-level="3.3" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#dickey-fuller-test"><i class="fa fa-check"></i><b>3.3</b> Dickey-Fuller Test</a></li>
+<li class="chapter" data-level="3.4" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#funciones-de-autocorrelación-acf-y-pacf"><i class="fa fa-check"></i><b>3.4</b> Funciones de autocorrelación (ACF y PACF)</a></li>
+<li class="chapter" data-level="3.5" data-path="preprocesamiento-y-visualización.html"><a href="preprocesamiento-y-visualización.html#rezagos"><i class="fa fa-check"></i><b>3.5</b> Rezagos</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="introducción-modelos-pronóstico.html"><a href="introducción-modelos-pronóstico.html"><i class="fa fa-check"></i><b>4</b> Introducción modelos pronóstico</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="introducción-modelos-pronóstico.html"><a href="introducción-modelos-pronóstico.html#tendencias-y-ciclos"><i class="fa fa-check"></i><b>4.1</b> Tendencias y ciclos</a></li>
+<li class="chapter" data-level="4.2" data-path="introducción-modelos-pronóstico.html"><a href="introducción-modelos-pronóstico.html#modelo-holt-winters"><i class="fa fa-check"></i><b>4.2</b> Modelo Holt-Winters</a></li>
+<li class="chapter" data-level="4.3" data-path="introducción-modelos-pronóstico.html"><a href="introducción-modelos-pronóstico.html#predicciones-iniciales"><i class="fa fa-check"></i><b>4.3</b> Predicciones iniciales</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html"><i class="fa fa-check"></i><b>5</b> Modelos estacionarios en series de tiempo</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#selección-de-series"><i class="fa fa-check"></i><b>5.1</b> Selección de series</a></li>
+<li class="chapter" data-level="5.2" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#puntos-de-cambio"><i class="fa fa-check"></i><b>5.2</b> Puntos de cambio</a></li>
+<li class="chapter" data-level="5.3" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#verificación-de-estacionariedad"><i class="fa fa-check"></i><b>5.3</b> Verificación de estacionariedad</a></li>
+<li class="chapter" data-level="5.4" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#funciones-de-acf-y-pact"><i class="fa fa-check"></i><b>5.4</b> Funciones de ACF y PACT</a></li>
+<li class="chapter" data-level="5.5" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#modelos-arima"><i class="fa fa-check"></i><b>5.5</b> Modelos ARIMA</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#predicciones-arima"><i class="fa fa-check"></i><b>5.5.1</b> Predicciones ARIMA</a></li>
+<li class="chapter" data-level="5.5.2" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#predicciones-forecast"><i class="fa fa-check"></i><b>5.5.2</b> Predicciones forecast</a></li>
+<li class="chapter" data-level="5.5.3" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#verificación-valores-atípicos"><i class="fa fa-check"></i><b>5.5.3</b> Verificación valores atípicos</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="modelos-estacionarios-en-series-de-tiempo.html"><a href="modelos-estacionarios-en-series-de-tiempo.html#observaciones-predicciones"><i class="fa fa-check"></i><b>5.6</b> Observaciones predicciones</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="regresión-en-series-de-tiempo.html"><a href="regresión-en-series-de-tiempo.html"><i class="fa fa-check"></i><b>6</b> Regresión en series de tiempo</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="regresión-en-series-de-tiempo.html"><a href="regresión-en-series-de-tiempo.html#selección-de-dataframes-para-regresión"><i class="fa fa-check"></i><b>6.1</b> Selección de dataframes para regresión</a></li>
+<li class="chapter" data-level="6.2" data-path="regresión-en-series-de-tiempo.html"><a href="regresión-en-series-de-tiempo.html#modelos-y-predicción-arima-ets-y-prophet"><i class="fa fa-check"></i><b>6.2</b> Modelos y predicción ARIMA, ETS y Prophet</a></li>
+<li class="chapter" data-level="6.3" data-path="regresión-en-series-de-tiempo.html"><a href="regresión-en-series-de-tiempo.html#comparación-de-modelos"><i class="fa fa-check"></i><b>6.3</b> Comparación de modelos</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="regresión-en-series-de-tiempo.html"><a href="regresión-en-series-de-tiempo.html#comparación-modelos-de-regresión-series-medellín"><i class="fa fa-check"></i><b>6.3.1</b> Comparación modelos de regresión series Medellín</a></li>
+<li class="chapter" data-level="6.3.2" data-path="regresión-en-series-de-tiempo.html"><a href="regresión-en-series-de-tiempo.html#comparación-modelos-de-regresión-series-valledupar"><i class="fa fa-check"></i><b>6.3.2</b> Comparación modelos de regresión series Valledupar</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="redes-neuronales-en-series-de-tiempo.html"><a href="redes-neuronales-en-series-de-tiempo.html"><i class="fa fa-check"></i><b>7</b> Redes neuronales en series de tiempo</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="redes-neuronales-en-series-de-tiempo.html"><a href="redes-neuronales-en-series-de-tiempo.html#conjunto-de-datos-de-prueba-y-entrenamiento"><i class="fa fa-check"></i><b>7.1</b> Conjunto de datos de prueba y entrenamiento</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="redes-neuronales-en-series-de-tiempo.html"><a href="redes-neuronales-en-series-de-tiempo.html#normalización-datos"><i class="fa fa-check"></i><b>7.1.1</b> Normalización datos</a></li>
+<li class="chapter" data-level="7.1.2" data-path="redes-neuronales-en-series-de-tiempo.html"><a href="redes-neuronales-en-series-de-tiempo.html#datos-de-prueba-y-entrenamiento"><i class="fa fa-check"></i><b>7.1.2</b> Datos de prueba y entrenamiento</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="redes-neuronales-en-series-de-tiempo.html"><a href="redes-neuronales-en-series-de-tiempo.html#modelo-y-predicción-modelo-elman"><i class="fa fa-check"></i><b>7.2</b> Modelo y predicción Modelo Elman</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="redes-neuronales-en-series-de-tiempo.html"><a href="redes-neuronales-en-series-de-tiempo.html#elman-medellín"><i class="fa fa-check"></i><b>7.2.1</b> Elman Medellín</a></li>
+<li class="chapter" data-level="7.2.2" data-path="redes-neuronales-en-series-de-tiempo.html"><a href="redes-neuronales-en-series-de-tiempo.html#elman-valledupar"><i class="fa fa-check"></i><b>7.2.2</b> Elman Valledupar</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="redes-neuronales-en-series-de-tiempo.html"><a href="redes-neuronales-en-series-de-tiempo.html#modelo-y-predicción-jordan"><i class="fa fa-check"></i><b>7.3</b> Modelo y predicción Jordan</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="redes-neuronales-en-series-de-tiempo.html"><a href="redes-neuronales-en-series-de-tiempo.html#jordan-medellín"><i class="fa fa-check"></i><b>7.3.1</b> Jordan Medellín</a></li>
+<li class="chapter" data-level="7.3.2" data-path="redes-neuronales-en-series-de-tiempo.html"><a href="redes-neuronales-en-series-de-tiempo.html#jordan-valledupar"><i class="fa fa-check"></i><b>7.3.2</b> Jordan Valledupar</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="redes-neuronales-en-series-de-tiempo.html"><a href="redes-neuronales-en-series-de-tiempo.html#observaciones-finales-redes-neuronales"><i class="fa fa-check"></i><b>7.4</b> Observaciones finales redes neuronales</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Universidad Javeriana Cali<br />
+Maestría en Ciencia de Datos</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="redes-neuronales-en-series-de-tiempo" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">Capítulo 7</span> Redes neuronales en series de tiempo<a href="redes-neuronales-en-series-de-tiempo.html#redes-neuronales-en-series-de-tiempo" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>En el presente capítulo se aplican los modelos de redes neuronales recurrentes de Elman y Jordan para la predicción de la temperatura máxima diaria estudiada en el proyecto. Tal como se hizo en los capítulos anteriores se trabajará con los datos de la temperatura seleccionados en el estudio para Valledupar y Medellín.</p>
+<div id="conjunto-de-datos-de-prueba-y-entrenamiento" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> Conjunto de datos de prueba y entrenamiento<a href="redes-neuronales-en-series-de-tiempo.html#conjunto-de-datos-de-prueba-y-entrenamiento" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="normalización-datos" class="section level3 hasAnchor" number="7.1.1">
+<h3><span class="header-section-number">7.1.1</span> Normalización datos<a href="redes-neuronales-en-series-de-tiempo.html#normalización-datos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Tal como se hizo en capítulos anteriores y se comentó anteriormente, se trabajará con los datos de la temperatura máxima diaria, nuevamente con los conjuntos de datos de Valledupar entre 2018 y 2019 y con los de Medellín entre 2022 y 2023. Para ambos modelos de redes neuronales la información debe ser trabajada en formato ts - Time series y normalizada, paso que se realiza a continuación y se observa en el gráfico su comportamiento posterior a esta transformación.</p>
+<div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb293-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb293-1" tabindex="-1"></a><span class="co"># Serie xts Temperatura máxima diaria Valledupar 2018-2019</span></span>
+<span id="cb293-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb293-2" tabindex="-1"></a>VUP_temp_2018_2019 <span class="ot">&lt;-</span> df_temp_max_ts[<span class="st">&quot;2018/2019&quot;</span>, <span class="st">&quot;VUP&quot;</span>]</span>
+<span id="cb293-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb293-3" tabindex="-1"></a></span>
+<span id="cb293-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb293-4" tabindex="-1"></a><span class="co"># Serie ts Temperatura máxima diaria Valledupar 2018-2019</span></span>
+<span id="cb293-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb293-5" tabindex="-1"></a>VUP_temp_2018_2019_ts <span class="ot">&lt;-</span> <span class="fu">as.ts</span>(VUP_temp_2018_2019)</span>
+<span id="cb293-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb293-6" tabindex="-1"></a></span>
+<span id="cb293-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb293-7" tabindex="-1"></a><span class="co"># Serie xts Temperatura máxima diaria Medellín 2022-2023</span></span>
+<span id="cb293-8"><a href="redes-neuronales-en-series-de-tiempo.html#cb293-8" tabindex="-1"></a>MED_temp_2022_2023 <span class="ot">&lt;-</span> df_temp_max_ts[<span class="st">&quot;2022/2023&quot;</span>, <span class="st">&quot;MED&quot;</span>]</span>
+<span id="cb293-9"><a href="redes-neuronales-en-series-de-tiempo.html#cb293-9" tabindex="-1"></a></span>
+<span id="cb293-10"><a href="redes-neuronales-en-series-de-tiempo.html#cb293-10" tabindex="-1"></a><span class="co"># Serie ts Temperatura máxima diaria Medellín 2022-2023</span></span>
+<span id="cb293-11"><a href="redes-neuronales-en-series-de-tiempo.html#cb293-11" tabindex="-1"></a>MED_temp_2022_2023_ts <span class="ot">&lt;-</span> <span class="fu">as.ts</span>(MED_temp_2022_2023)</span></code></pre></div>
+<p>A continuación, se normalizan los datos para las ciudades y periodos seleccionados del conjunto de datos:</p>
+<div class="sourceCode" id="cb294"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb294-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb294-1" tabindex="-1"></a><span class="co"># Normalización Medellín</span></span>
+<span id="cb294-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb294-2" tabindex="-1"></a>MED_Z <span class="ot">&lt;-</span> <span class="fu">as.ts</span>(<span class="fu">as.numeric</span>(MED_temp_2022_2023_ts), <span class="fu">frequency</span>(<span class="dv">365</span>))</span>
+<span id="cb294-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb294-3" tabindex="-1"></a><span class="fu">class</span>(MED_Z)</span></code></pre></div>
+<pre><code>## [1] &quot;ts&quot;</code></pre>
+<div class="sourceCode" id="cb296"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb296-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb296-1" tabindex="-1"></a><span class="fu">str</span>(MED_Z)</span></code></pre></div>
+<pre><code>##  Time-Series [1:730] from 1 to 730: 27.4 26.4 27.8 28 28.2 26 25 26.8 27.4 24.6 ...</code></pre>
+<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb298-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb298-1" tabindex="-1"></a>MED_S <span class="ot">&lt;-</span> (MED_Z<span class="sc">-</span><span class="fu">min</span>(MED_Z))<span class="sc">/</span>(<span class="fu">max</span>(MED_Z)<span class="sc">-</span><span class="fu">min</span>(MED_Z)) </span>
+<span id="cb298-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb298-2" tabindex="-1"></a><span class="fu">summary</span>(MED_S)</span></code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##  0.0000  0.4917  0.6167  0.6105  0.7333  1.0000</code></pre>
+<div class="sourceCode" id="cb300"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb300-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb300-1" tabindex="-1"></a><span class="fu">plot</span>(MED_S, </span>
+<span id="cb300-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb300-2" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Temperatura máxima diaria normalizada Medellín 2022-2023&quot;</span>, </span>
+<span id="cb300-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb300-3" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Tiempo / Día&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Temperatura Normalizada&quot;</span>,</span>
+<span id="cb300-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb300-4" tabindex="-1"></a>     <span class="at">col=</span><span class="st">&quot;lightgreen&quot;</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-112-1.png" width="672" /></p>
+<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb301-1" tabindex="-1"></a><span class="co"># Normalización Valledupar</span></span>
+<span id="cb301-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb301-2" tabindex="-1"></a>VUP_Z <span class="ot">&lt;-</span> <span class="fu">as.ts</span>(<span class="fu">as.numeric</span>(VUP_temp_2018_2019_ts), <span class="fu">frequency</span>(<span class="dv">365</span>))</span>
+<span id="cb301-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb301-3" tabindex="-1"></a><span class="fu">class</span>(VUP_Z)</span></code></pre></div>
+<pre><code>## [1] &quot;ts&quot;</code></pre>
+<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb303-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb303-1" tabindex="-1"></a><span class="fu">str</span>(VUP_Z)</span></code></pre></div>
+<pre><code>##  Time-Series [1:730] from 1 to 730: 34.2 32.3 33.5 33.4 32.8 34.2 33.9 34.8 34.4 33.3 ...</code></pre>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb305-1" tabindex="-1"></a>VUP_S <span class="ot">&lt;-</span> (VUP_Z<span class="sc">-</span><span class="fu">min</span>(VUP_Z))<span class="sc">/</span>(<span class="fu">max</span>(VUP_Z)<span class="sc">-</span><span class="fu">min</span>(VUP_Z)) </span>
+<span id="cb305-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb305-2" tabindex="-1"></a><span class="fu">summary</span>(VUP_S)</span></code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##  0.0000  0.5020  0.6094  0.6001  0.7031  1.0000</code></pre>
+<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb307-1" tabindex="-1"></a><span class="fu">plot</span>(VUP_S, </span>
+<span id="cb307-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb307-2" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Temperatura máxima diaria normalizada Valledupar 2018-2019&quot;</span>, </span>
+<span id="cb307-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb307-3" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Tiempo / Día&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Temperatura Normalizada&quot;</span>,</span>
+<span id="cb307-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb307-4" tabindex="-1"></a>     <span class="at">col=</span><span class="st">&quot;orange&quot;</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-113-1.png" width="672" /></p>
+</div>
+<div id="datos-de-prueba-y-entrenamiento" class="section level3 hasAnchor" number="7.1.2">
+<h3><span class="header-section-number">7.1.2</span> Datos de prueba y entrenamiento<a href="redes-neuronales-en-series-de-tiempo.html#datos-de-prueba-y-entrenamiento" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A continuación se separa el conjunto de datos en dos, entrenamiento y prueba (<em>train/test split</em>), en 75% y 25% respectivamente. Posteriormente se genera un <em>dataframe</em> con n columnas, cada una de ellas con un lag adicional hasta llegar a 12, y se seleccionan los valores de entrada y salida de la red neuronal, input / output.</p>
+<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb308-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb308-1" tabindex="-1"></a><span class="co"># Train / test Medellín</span></span>
+<span id="cb308-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb308-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">length</span>(MED_S) <span class="sc">==</span> <span class="fu">length</span>(VUP_S))</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb310-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb310-1" tabindex="-1"></a>len_total <span class="ot">&lt;-</span> <span class="fu">length</span>(MED_S)</span>
+<span id="cb310-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb310-2" tabindex="-1"></a>len_train <span class="ot">&lt;-</span> <span class="fu">round</span>(len_total<span class="sc">*</span><span class="fl">0.75</span>, <span class="at">digits =</span> <span class="dv">0</span>)</span>
+<span id="cb310-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb310-3" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>(len_train<span class="dv">-1</span>)</span>
+<span id="cb310-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb310-4" tabindex="-1"></a>test <span class="ot">&lt;-</span> (len_train)<span class="sc">:</span>len_total</span></code></pre></div>
+<p>A continuación, se generan las entradas y salidas para Medellín.</p>
+<div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb311-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-1" tabindex="-1"></a><span class="co"># Lags, entradas y salidas Medellín</span></span>
+<span id="cb311-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-2" tabindex="-1"></a>MED_y <span class="ot">&lt;-</span> <span class="fu">as.zoo</span>(MED_S)</span>
+<span id="cb311-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-3" tabindex="-1"></a>MED_x1 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(MED_y, <span class="at">k =</span> <span class="dv">1</span>)</span>
+<span id="cb311-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-4" tabindex="-1"></a>MED_x2 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(MED_y, <span class="at">k =</span> <span class="dv">2</span>)</span>
+<span id="cb311-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-5" tabindex="-1"></a>MED_x3 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(MED_y, <span class="at">k =</span> <span class="dv">3</span>)</span>
+<span id="cb311-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-6" tabindex="-1"></a>MED_x4 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(MED_y, <span class="at">k =</span> <span class="dv">4</span>)</span>
+<span id="cb311-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-7" tabindex="-1"></a>MED_x5 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(MED_y, <span class="at">k =</span> <span class="dv">5</span>)</span>
+<span id="cb311-8"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-8" tabindex="-1"></a>MED_x6 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(MED_y, <span class="at">k =</span> <span class="dv">6</span>)</span>
+<span id="cb311-9"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-9" tabindex="-1"></a>MED_x7 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(MED_y, <span class="at">k =</span> <span class="dv">7</span>)</span>
+<span id="cb311-10"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-10" tabindex="-1"></a>MED_x8 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(MED_y, <span class="at">k =</span> <span class="dv">8</span>)</span>
+<span id="cb311-11"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-11" tabindex="-1"></a>MED_x9 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(MED_y, <span class="at">k =</span> <span class="dv">9</span>)</span>
+<span id="cb311-12"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-12" tabindex="-1"></a>MED_x10 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(MED_y, <span class="at">k =</span> <span class="dv">10</span>)</span>
+<span id="cb311-13"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-13" tabindex="-1"></a>MED_x11 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(MED_y, <span class="at">k =</span> <span class="dv">11</span>)</span>
+<span id="cb311-14"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-14" tabindex="-1"></a>MED_x12 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(MED_y, <span class="at">k =</span> <span class="dv">12</span>)</span>
+<span id="cb311-15"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-15" tabindex="-1"></a>MED_slogN <span class="ot">&lt;-</span> <span class="fu">cbind</span>(MED_y,MED_x1,MED_x2,MED_x3,MED_x4,MED_x5,MED_x6,MED_x7,MED_x8,MED_x9,MED_x10,MED_x11,MED_x12)</span>
+<span id="cb311-16"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-16" tabindex="-1"></a></span>
+<span id="cb311-17"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-17" tabindex="-1"></a>MED_slogN1 <span class="ot">&lt;-</span> MED_slogN[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>),]</span>
+<span id="cb311-18"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-18" tabindex="-1"></a></span>
+<span id="cb311-19"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-19" tabindex="-1"></a>MED_inputs <span class="ot">&lt;-</span> MED_slogN1[,<span class="dv">2</span><span class="sc">:</span><span class="dv">13</span>]</span>
+<span id="cb311-20"><a href="redes-neuronales-en-series-de-tiempo.html#cb311-20" tabindex="-1"></a>MED_outputs <span class="ot">&lt;-</span> MED_slogN1[,<span class="dv">1</span>]</span></code></pre></div>
+<p>Ahora se generan las entradas y salidas para Valledupar.</p>
+<div class="sourceCode" id="cb312"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb312-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-1" tabindex="-1"></a><span class="co"># Lags, entradas y salidas Valledupar</span></span>
+<span id="cb312-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-2" tabindex="-1"></a>VUP_y <span class="ot">&lt;-</span> <span class="fu">as.zoo</span>(VUP_S)</span>
+<span id="cb312-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-3" tabindex="-1"></a>VUP_x1 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(VUP_y, <span class="at">k =</span> <span class="dv">1</span>)</span>
+<span id="cb312-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-4" tabindex="-1"></a>VUP_x2 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(VUP_y, <span class="at">k =</span> <span class="dv">2</span>)</span>
+<span id="cb312-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-5" tabindex="-1"></a>VUP_x3 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(VUP_y, <span class="at">k =</span> <span class="dv">3</span>)</span>
+<span id="cb312-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-6" tabindex="-1"></a>VUP_x4 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(VUP_y, <span class="at">k =</span> <span class="dv">4</span>)</span>
+<span id="cb312-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-7" tabindex="-1"></a>VUP_x5 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(VUP_y, <span class="at">k =</span> <span class="dv">5</span>)</span>
+<span id="cb312-8"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-8" tabindex="-1"></a>VUP_x6 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(VUP_y, <span class="at">k =</span> <span class="dv">6</span>)</span>
+<span id="cb312-9"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-9" tabindex="-1"></a>VUP_x7 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(VUP_y, <span class="at">k =</span> <span class="dv">7</span>)</span>
+<span id="cb312-10"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-10" tabindex="-1"></a>VUP_x8 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(VUP_y, <span class="at">k =</span> <span class="dv">8</span>)</span>
+<span id="cb312-11"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-11" tabindex="-1"></a>VUP_x9 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(VUP_y, <span class="at">k =</span> <span class="dv">9</span>)</span>
+<span id="cb312-12"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-12" tabindex="-1"></a>VUP_x10 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(VUP_y, <span class="at">k =</span> <span class="dv">10</span>)</span>
+<span id="cb312-13"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-13" tabindex="-1"></a>VUP_x11 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(VUP_y, <span class="at">k =</span> <span class="dv">11</span>)</span>
+<span id="cb312-14"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-14" tabindex="-1"></a>VUP_x12 <span class="ot">&lt;-</span> <span class="fu">Lag</span>(VUP_y, <span class="at">k =</span> <span class="dv">12</span>)</span>
+<span id="cb312-15"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-15" tabindex="-1"></a>VUP_slogN <span class="ot">&lt;-</span> <span class="fu">cbind</span>(VUP_y,VUP_x1,VUP_x2,VUP_x3,VUP_x4,VUP_x5,VUP_x6,VUP_x7,VUP_x8,VUP_x9,VUP_x10,VUP_x11,VUP_x12)</span>
+<span id="cb312-16"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-16" tabindex="-1"></a></span>
+<span id="cb312-17"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-17" tabindex="-1"></a>VUP_slogN1 <span class="ot">&lt;-</span> VUP_slogN[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>),]</span>
+<span id="cb312-18"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-18" tabindex="-1"></a></span>
+<span id="cb312-19"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-19" tabindex="-1"></a>VUP_inputs <span class="ot">&lt;-</span> VUP_slogN1[,<span class="dv">2</span><span class="sc">:</span><span class="dv">13</span>]</span>
+<span id="cb312-20"><a href="redes-neuronales-en-series-de-tiempo.html#cb312-20" tabindex="-1"></a>VUP_outputs <span class="ot">&lt;-</span> VUP_slogN1[,<span class="dv">1</span>]</span></code></pre></div>
+</div>
+</div>
+<div id="modelo-y-predicción-modelo-elman" class="section level2 hasAnchor" number="7.2">
+<h2><span class="header-section-number">7.2</span> Modelo y predicción Modelo Elman<a href="redes-neuronales-en-series-de-tiempo.html#modelo-y-predicción-modelo-elman" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A continuación se presentan los parámetros configurados para la búsqueda los mejores u óptimos a ser empleados para la creación de red neuronal de Elman, se mapearon los valores que podrán ser tomados por la malla en los parámetros, <code>learnFuncParams_grid</code>, <code>size_grid</code> y <code>maxit_grid</code>.</p>
+<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb313-1" tabindex="-1"></a><span class="co"># Parámetros Grid Search Elman</span></span>
+<span id="cb313-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb313-2" tabindex="-1"></a>learnFuncParams_grid <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>)</span>
+<span id="cb313-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb313-3" tabindex="-1"></a>size_grid <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">3</span>), <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
+<span id="cb313-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb313-4" tabindex="-1"></a>maxit_grid <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10000</span>, <span class="dv">50000</span>, <span class="dv">100000</span>)</span>
+<span id="cb313-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb313-5" tabindex="-1"></a></span>
+<span id="cb313-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb313-6" tabindex="-1"></a>best_rmse <span class="ot">&lt;-</span> <span class="cn">Inf</span></span>
+<span id="cb313-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb313-7" tabindex="-1"></a>best_params <span class="ot">&lt;-</span> <span class="fu">list</span>()</span></code></pre></div>
+<p>El <em>grid Search</em> de los parámetros sigue el proceso de primero entrenar el modelo Elman para cada combinación de parámetros, luego se calcula el error cuadrático medio y se selecciona la combinación de parámetros que dio el menor MSE.</p>
+<div id="elman-medellín" class="section level3 hasAnchor" number="7.2.1">
+<h3><span class="header-section-number">7.2.1</span> Elman Medellín<a href="redes-neuronales-en-series-de-tiempo.html#elman-medellín" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En primer lugar se aplicó <em>grid Search</em> al conjunto de datos de Medellín con el siguiente bucle <code>for</code>:</p>
+<div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb314-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-1" tabindex="-1"></a><span class="co"># Grid search Elman Medellín</span></span>
+<span id="cb314-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-2" tabindex="-1"></a><span class="cf">for</span> (learnFuncParam <span class="cf">in</span> learnFuncParams_grid) {</span>
+<span id="cb314-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-3" tabindex="-1"></a>  <span class="cf">for</span> (size <span class="cf">in</span> size_grid) {</span>
+<span id="cb314-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-4" tabindex="-1"></a>    <span class="cf">for</span> (maxit <span class="cf">in</span> maxit_grid) {</span>
+<span id="cb314-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-5" tabindex="-1"></a>      <span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb314-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-6" tabindex="-1"></a>      fit <span class="ot">&lt;-</span> <span class="fu">elman</span>(MED_inputs[train, ], MED_outputs[train], <span class="at">size =</span> size, <span class="at">learnFuncParams =</span> learnFuncParam, <span class="at">maxit =</span> maxit)</span>
+<span id="cb314-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-7" tabindex="-1"></a>      predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, MED_inputs[<span class="sc">-</span>train, ])</span>
+<span id="cb314-8"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-8" tabindex="-1"></a>      rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((MED_outputs[<span class="sc">-</span>train] <span class="sc">-</span> predictions)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb314-9"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-9" tabindex="-1"></a></span>
+<span id="cb314-10"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-10" tabindex="-1"></a>      <span class="cf">if</span> (rmse <span class="sc">&lt;</span> best_rmse) {</span>
+<span id="cb314-11"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-11" tabindex="-1"></a>        best_rmse <span class="ot">&lt;-</span> rmse</span>
+<span id="cb314-12"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-12" tabindex="-1"></a>        best_params <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">learnFuncParams =</span> learnFuncParam, <span class="at">size =</span> size, <span class="at">maxit =</span> maxit)</span>
+<span id="cb314-13"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-13" tabindex="-1"></a>      }</span>
+<span id="cb314-14"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-14" tabindex="-1"></a>    }</span>
+<span id="cb314-15"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-15" tabindex="-1"></a>  }</span>
+<span id="cb314-16"><a href="redes-neuronales-en-series-de-tiempo.html#cb314-16" tabindex="-1"></a>}</span></code></pre></div>
+<p>Es importante mencionar, que los tiempos computacionales para tanto la corrida de la búsqueda / <em>grid Search</em> para Elman y Jordan son intensivos para ambas ciudades analizadas y estuvieron en alrededor de 7 horas para los dos modelos (4 horas para Medellín).</p>
+<p>Teniendo presente lo anterior, se encontró que el mejor modelo de red Elman para Medellín se obtiene con los parámetros que indican una tasa de aprendizaje de 0.01, un número de iteraciones máxima de 10000 y se busca crear 2 capas ocultas, una con 5 y otra con 2, encontrando un RMSE de aproximadamente 0.138 con esta combinación.</p>
+<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb315-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb315-1" tabindex="-1"></a><span class="co"># Mejores parámetros Elman Medellín</span></span>
+<span id="cb315-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb315-2" tabindex="-1"></a><span class="fu">print</span>(best_params)</span></code></pre></div>
+<pre><code>## $learnFuncParams
+## [1] 0.01
+## 
+## $size
+## [1] 5 2
+## 
+## $maxit
+## [1] 10000</code></pre>
+<div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb317-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb317-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Mejor RMSE grid search MED:&quot;</span>, best_rmse))</span></code></pre></div>
+<pre><code>## [1] &quot;Mejor RMSE grid search MED: 0.137767485776398&quot;</code></pre>
+<p>Con la función <code>plotIterativeError</code> podemos ver cómo ha evolucionado el error de red a lo largo de las iteraciones de entrenamiento, donde ser observa que el error converge a cero rápidamente.Y en el gráfico siguiente se observa como es el ajuste del modelo de Elman (color rojo), observando que sigue bastante bien el comportamiento de la serie original sin embargo que parece haber limitaciones frente a los picos alto y bajos de la serie de prueba.</p>
+<div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb319-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb319-1" tabindex="-1"></a><span class="co"># Entrenamiento mejores parámetros Elman Medellín</span></span>
+<span id="cb319-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb319-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb319-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb319-3" tabindex="-1"></a>MED_fit_elman <span class="ot">&lt;-</span> <span class="fu">elman</span>(MED_inputs[train, ], MED_outputs[train], <span class="at">size =</span> best_params<span class="sc">$</span>size, <span class="at">learnFuncParams =</span> best_params<span class="sc">$</span>learnFuncParams, <span class="at">maxit =</span> best_params<span class="sc">$</span>maxit)</span>
+<span id="cb319-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb319-4" tabindex="-1"></a><span class="fu">plotIterativeError</span>(MED_fit_elman, </span>
+<span id="cb319-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb319-5" tabindex="-1"></a>                   <span class="at">main =</span> <span class="st">&quot;Error iterativo Elman Medellín&quot;</span>,</span>
+<span id="cb319-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb319-6" tabindex="-1"></a>                   <span class="at">col=</span><span class="st">&quot;lightgreen&quot;</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-120-1.png" width="672" /></p>
+<p>A continuación se compara la predicción de Elman para los datos de prueba de Medellín con los datos reales de temperatura (normalizados).</p>
+<div class="sourceCode" id="cb320"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb320-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb320-1" tabindex="-1"></a><span class="co"># Predicción test Elman Medellín</span></span>
+<span id="cb320-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb320-2" tabindex="-1"></a>MED_y_test <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(MED_outputs[<span class="sc">-</span>test])</span>
+<span id="cb320-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb320-3" tabindex="-1"></a><span class="fu">plot</span>(MED_y_test,<span class="at">type=</span><span class="st">&quot;l&quot;</span>, </span>
+<span id="cb320-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb320-4" tabindex="-1"></a>                   <span class="at">main =</span> <span class="st">&quot;Predicción Prueba / Test Elman Medellín&quot;</span>,</span>
+<span id="cb320-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb320-5" tabindex="-1"></a>                   <span class="at">col=</span><span class="st">&quot;lightgreen&quot;</span>)</span>
+<span id="cb320-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb320-6" tabindex="-1"></a>MED_pred_elman <span class="ot">&lt;-</span> <span class="fu">predict</span>(MED_fit_elman, MED_inputs[<span class="sc">-</span>test])</span>
+<span id="cb320-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb320-7" tabindex="-1"></a><span class="fu">lines</span>(MED_pred_elman,<span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb320-8"><a href="redes-neuronales-en-series-de-tiempo.html#cb320-8" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;Real&quot;</span>, <span class="st">&quot;Predicción&quot;</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;lightgreen&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-121-1.png" width="672" /></p>
+<p>Se evidencia en la figura anterior, que la predicción de Elman capta en general la tendencia de las mediciones de temperatura de Medellín (en este caso normalizadas), pero no reproduce bien los picos extremos (especialmente los mínimos).</p>
+<p>A continuación se ejecuta el modelo de predicción para realizar una visualización de como sería el comportamiento de la temperatura máxima posterior a las fechas de referencia que se están usando, y observar si parece mantener la tendencia general de los datos históricos. En este caso la predicción se gráfica de color rojo visualizando que parece presentar datos cercanos a la tendencia y no genera picos demasiado pronunciados, por lo que el pronóstico es coherente.</p>
+<div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb321-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb321-1" tabindex="-1"></a><span class="co"># Predicción train Elman Medellín</span></span>
+<span id="cb321-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb321-2" tabindex="-1"></a>MED_predictions_elman <span class="ot">&lt;-</span> <span class="fu">predict</span>(MED_fit_elman, MED_inputs[<span class="sc">-</span>train])</span>
+<span id="cb321-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb321-3" tabindex="-1"></a></span>
+<span id="cb321-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb321-4" tabindex="-1"></a>MED_forecasting_elman <span class="ot">&lt;-</span> MED_predictions_elman<span class="sc">*</span>(<span class="fu">max</span>(MED_Z)<span class="sc">-</span><span class="fu">min</span>(MED_Z))<span class="sc">+</span><span class="fu">min</span>(MED_Z)</span>
+<span id="cb321-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb321-5" tabindex="-1"></a></span>
+<span id="cb321-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb321-6" tabindex="-1"></a>MED_x_elman <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>(len_total<span class="sc">+</span><span class="fu">length</span>(MED_forecasting_elman))</span>
+<span id="cb321-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb321-7" tabindex="-1"></a>MED_y_elman <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">as.vector</span>(MED_Z), MED_forecasting_elman)</span>
+<span id="cb321-8"><a href="redes-neuronales-en-series-de-tiempo.html#cb321-8" tabindex="-1"></a><span class="fu">plot</span>(MED_x_elman[<span class="dv">1</span><span class="sc">:</span>len_total], MED_y_elman[<span class="dv">1</span><span class="sc">:</span>len_total], <span class="at">type=</span><span class="st">&quot;l&quot;</span>, </span>
+<span id="cb321-9"><a href="redes-neuronales-en-series-de-tiempo.html#cb321-9" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Forecasting Elman Temperatura Medellín&quot;</span>, </span>
+<span id="cb321-10"><a href="redes-neuronales-en-series-de-tiempo.html#cb321-10" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Tiempo / Día&quot;</span>,</span>
+<span id="cb321-11"><a href="redes-neuronales-en-series-de-tiempo.html#cb321-11" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">&quot;Temperatura [ºC]&quot;</span>,</span>
+<span id="cb321-12"><a href="redes-neuronales-en-series-de-tiempo.html#cb321-12" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">&quot;lightgreen&quot;</span>)</span>
+<span id="cb321-13"><a href="redes-neuronales-en-series-de-tiempo.html#cb321-13" tabindex="-1"></a><span class="fu">lines</span>(MED_x_elman[(len_total)<span class="sc">:</span><span class="fu">length</span>(MED_x_elman)], MED_y_elman[(len_total)<span class="sc">:</span><span class="fu">length</span>(MED_x_elman)], <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb321-14"><a href="redes-neuronales-en-series-de-tiempo.html#cb321-14" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;Real&quot;</span>, <span class="st">&quot;Predicción&quot;</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;lightgreen&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-122-1.png" width="672" /></p>
+</div>
+<div id="elman-valledupar" class="section level3 hasAnchor" number="7.2.2">
+<h3><span class="header-section-number">7.2.2</span> Elman Valledupar<a href="redes-neuronales-en-series-de-tiempo.html#elman-valledupar" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Para Valledupar al igual que con Medellín se aplicó bucle <em>grid search</em> al conjunto de datos de precipitación para encontrar los parámetros óptimos para Elman (la corrida fue de cerca de 3 horas para Elman y Jordan -siendo más intensivo este último modelo / redes-):</p>
+<div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb322-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-1" tabindex="-1"></a><span class="co"># Grid search Elman Valledupar</span></span>
+<span id="cb322-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-2" tabindex="-1"></a><span class="cf">for</span> (learnFuncParam <span class="cf">in</span> learnFuncParams_grid) {</span>
+<span id="cb322-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-3" tabindex="-1"></a>  <span class="cf">for</span> (size <span class="cf">in</span> size_grid) {</span>
+<span id="cb322-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-4" tabindex="-1"></a>    <span class="cf">for</span> (maxit <span class="cf">in</span> maxit_grid) {</span>
+<span id="cb322-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-5" tabindex="-1"></a>      <span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb322-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-6" tabindex="-1"></a>      fit <span class="ot">&lt;-</span> <span class="fu">elman</span>(VUP_inputs[train, ], VUP_outputs[train], <span class="at">size =</span> size, <span class="at">learnFuncParams =</span> learnFuncParam, <span class="at">maxit =</span> maxit)</span>
+<span id="cb322-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-7" tabindex="-1"></a>      predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, VUP_inputs[<span class="sc">-</span>train, ])</span>
+<span id="cb322-8"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-8" tabindex="-1"></a>      rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((VUP_outputs[<span class="sc">-</span>train] <span class="sc">-</span> predictions)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb322-9"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-9" tabindex="-1"></a></span>
+<span id="cb322-10"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-10" tabindex="-1"></a>      <span class="cf">if</span> (rmse <span class="sc">&lt;</span> best_rmse) {</span>
+<span id="cb322-11"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-11" tabindex="-1"></a>        best_rmse <span class="ot">&lt;-</span> rmse</span>
+<span id="cb322-12"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-12" tabindex="-1"></a>        best_params <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">learnFuncParams =</span> learnFuncParam, <span class="at">size =</span> size, <span class="at">maxit =</span> maxit)</span>
+<span id="cb322-13"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-13" tabindex="-1"></a>      }</span>
+<span id="cb322-14"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-14" tabindex="-1"></a>    }</span>
+<span id="cb322-15"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-15" tabindex="-1"></a>  }</span>
+<span id="cb322-16"><a href="redes-neuronales-en-series-de-tiempo.html#cb322-16" tabindex="-1"></a>}</span></code></pre></div>
+<p>Para Valledupar, se encontró que el mejor modelo de red Elman se obtiene con los parámetros que indican una tasa de aprendizaje de 0.01, un número de iteraciones máxima de 10000 y se busca crear 2 capas ocultas, una con 10 y otra con 3, encontrando un RMSE de aproximadamente 0.135 con esta combinación.</p>
+<div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb323-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb323-1" tabindex="-1"></a><span class="co"># Mejores parámetros Elman Valledupar</span></span>
+<span id="cb323-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb323-2" tabindex="-1"></a><span class="fu">print</span>(best_params)</span></code></pre></div>
+<pre><code>## $learnFuncParams
+## [1] 0.01
+## 
+## $size
+## [1] 10  3
+## 
+## $maxit
+## [1] 10000</code></pre>
+<div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb325-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb325-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Mejor RMSE grid search MED:&quot;</span>, best_rmse))</span></code></pre></div>
+<pre><code>## [1] &quot;Mejor RMSE grid search MED: 0.135409646265315&quot;</code></pre>
+<p>Vemos ahora, para Valledupar la evolución el error de red a lo largo de las iteraciones de entrenamiento con <code>plotIterativeError</code>.</p>
+<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb327-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb327-1" tabindex="-1"></a><span class="co"># Entrenamiento mejores parámetros Elman Valledupar</span></span>
+<span id="cb327-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb327-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb327-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb327-3" tabindex="-1"></a>VUP_fit_elman <span class="ot">&lt;-</span> <span class="fu">elman</span>(VUP_inputs[train, ], VUP_outputs[train], <span class="at">size =</span> best_params<span class="sc">$</span>size, <span class="at">learnFuncParams =</span> best_params<span class="sc">$</span>learnFuncParams, <span class="at">maxit =</span> best_params<span class="sc">$</span>maxit)</span>
+<span id="cb327-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb327-4" tabindex="-1"></a><span class="fu">plotIterativeError</span>(VUP_fit_elman, </span>
+<span id="cb327-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb327-5" tabindex="-1"></a>                   <span class="at">main =</span> <span class="st">&quot;Error iterativo Elman Valledupar&quot;</span>,</span>
+<span id="cb327-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb327-6" tabindex="-1"></a>                   <span class="at">col=</span><span class="st">&quot;orange&quot;</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-125-1.png" width="672" /></p>
+<p>A continuación se compara la predicción de Elman para los datos de prueba / test de Valledupar.</p>
+<div class="sourceCode" id="cb328"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb328-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb328-1" tabindex="-1"></a><span class="co"># Predicción test Elman Valledupar</span></span>
+<span id="cb328-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb328-2" tabindex="-1"></a>VUP_y_test <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(VUP_outputs[<span class="sc">-</span>test])</span>
+<span id="cb328-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb328-3" tabindex="-1"></a><span class="fu">plot</span>(VUP_y_test,<span class="at">type=</span><span class="st">&quot;l&quot;</span>, </span>
+<span id="cb328-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb328-4" tabindex="-1"></a>                   <span class="at">main =</span> <span class="st">&quot;Predicción Prueba / Test Elman Valledupar&quot;</span>,</span>
+<span id="cb328-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb328-5" tabindex="-1"></a>                   <span class="at">col=</span><span class="st">&quot;orange&quot;</span>)</span>
+<span id="cb328-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb328-6" tabindex="-1"></a>VUP_pred_elman <span class="ot">&lt;-</span> <span class="fu">predict</span>(VUP_fit_elman, VUP_inputs[<span class="sc">-</span>test])</span>
+<span id="cb328-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb328-7" tabindex="-1"></a><span class="fu">lines</span>(VUP_pred_elman,<span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb328-8"><a href="redes-neuronales-en-series-de-tiempo.html#cb328-8" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;Real&quot;</span>, <span class="st">&quot;Predicción&quot;</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;orange&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-126-1.png" width="672" /></p>
+<p>Como se puede observar en la gráfica anterior la predicción para los datos de prueba se ajusta a la tendencia general de la temperatura de Valledupar, aunque no es el caso para los máximos y mínimos.</p>
+<p>A continuación se ejecuta el modelo de predicción para realizar una visualización de como sería el comportamiento de la temperatura máxima posterior a las fechas de referencia que se están usando, y como se observa la predicción (en rojo) se encuentran dentro de la tendencia de los datos reales históricos.</p>
+<div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb329-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb329-1" tabindex="-1"></a><span class="co"># Predicción train Elman Valledupar</span></span>
+<span id="cb329-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb329-2" tabindex="-1"></a>VUP_predictions_elman <span class="ot">&lt;-</span> <span class="fu">predict</span>(VUP_fit_elman, VUP_inputs[<span class="sc">-</span>train])</span>
+<span id="cb329-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb329-3" tabindex="-1"></a></span>
+<span id="cb329-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb329-4" tabindex="-1"></a>VUP_forecasting_elman <span class="ot">&lt;-</span> VUP_predictions_elman<span class="sc">*</span>(<span class="fu">max</span>(VUP_Z)<span class="sc">-</span><span class="fu">min</span>(VUP_Z))<span class="sc">+</span><span class="fu">min</span>(VUP_Z)</span>
+<span id="cb329-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb329-5" tabindex="-1"></a></span>
+<span id="cb329-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb329-6" tabindex="-1"></a>VUP_x_elman <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>(len_total<span class="sc">+</span><span class="fu">length</span>(VUP_forecasting_elman))</span>
+<span id="cb329-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb329-7" tabindex="-1"></a>VUP_y_elman <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">as.vector</span>(VUP_Z), VUP_forecasting_elman)</span>
+<span id="cb329-8"><a href="redes-neuronales-en-series-de-tiempo.html#cb329-8" tabindex="-1"></a><span class="fu">plot</span>(VUP_x_elman[<span class="dv">1</span><span class="sc">:</span>len_total], VUP_y_elman[<span class="dv">1</span><span class="sc">:</span>len_total], <span class="at">type=</span><span class="st">&quot;l&quot;</span>, </span>
+<span id="cb329-9"><a href="redes-neuronales-en-series-de-tiempo.html#cb329-9" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Forecasting Elman Temperatura Valledupar&quot;</span>, </span>
+<span id="cb329-10"><a href="redes-neuronales-en-series-de-tiempo.html#cb329-10" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Tiempo / Día&quot;</span>,</span>
+<span id="cb329-11"><a href="redes-neuronales-en-series-de-tiempo.html#cb329-11" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">&quot;Temperatura [ºC]&quot;</span>,</span>
+<span id="cb329-12"><a href="redes-neuronales-en-series-de-tiempo.html#cb329-12" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>)</span>
+<span id="cb329-13"><a href="redes-neuronales-en-series-de-tiempo.html#cb329-13" tabindex="-1"></a><span class="fu">lines</span>(VUP_x_elman[(len_total)<span class="sc">:</span><span class="fu">length</span>(VUP_x_elman)], VUP_y_elman[(len_total)<span class="sc">:</span><span class="fu">length</span>(VUP_x_elman)], <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb329-14"><a href="redes-neuronales-en-series-de-tiempo.html#cb329-14" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;Real&quot;</span>, <span class="st">&quot;Predicción&quot;</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;orange&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-127-1.png" width="672" /></p>
+</div>
+</div>
+<div id="modelo-y-predicción-jordan" class="section level2 hasAnchor" number="7.3">
+<h2><span class="header-section-number">7.3</span> Modelo y predicción Jordan<a href="redes-neuronales-en-series-de-tiempo.html#modelo-y-predicción-jordan" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Tal como se describió con Elman, a continuación se presentan los parámetros para la búsqueda <em>grid search</em> para Jordan, nuevamente con <code>learnFuncParams_grid</code>, <code>size_grid</code> y <code>maxit_grid</code>.</p>
+<div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb330-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb330-1" tabindex="-1"></a><span class="co"># Parametros Grid Search Jordan</span></span>
+<span id="cb330-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb330-2" tabindex="-1"></a>learnFuncParams_grid <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>)</span>
+<span id="cb330-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb330-3" tabindex="-1"></a>size_grid <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">25</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">150</span>)</span>
+<span id="cb330-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb330-4" tabindex="-1"></a>maxit_grid <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10000</span>, <span class="dv">50000</span>, <span class="dv">100000</span>)</span>
+<span id="cb330-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb330-5" tabindex="-1"></a></span>
+<span id="cb330-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb330-6" tabindex="-1"></a>best_rmse <span class="ot">&lt;-</span> <span class="cn">Inf</span></span>
+<span id="cb330-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb330-7" tabindex="-1"></a>best_params <span class="ot">&lt;-</span> <span class="fu">list</span>()</span></code></pre></div>
+<div id="jordan-medellín" class="section level3 hasAnchor" number="7.3.1">
+<h3><span class="header-section-number">7.3.1</span> Jordan Medellín<a href="redes-neuronales-en-series-de-tiempo.html#jordan-medellín" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Como con Elman, el <em>grid Search</em> entrena el modelo Jordan para cada combinación de parámetros, luego se calcula el error cuadrático medio y se selecciona la combinación de parámetros que dio el menor MSE de la misma manera que se ejecutó en el numeral anterior.</p>
+<div class="sourceCode" id="cb331"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb331-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-1" tabindex="-1"></a><span class="co"># Grid search Jordan Medellín</span></span>
+<span id="cb331-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-2" tabindex="-1"></a><span class="cf">for</span> (learnFuncParam <span class="cf">in</span> learnFuncParams_grid) {</span>
+<span id="cb331-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-3" tabindex="-1"></a>  <span class="cf">for</span> (size <span class="cf">in</span> size_grid) {</span>
+<span id="cb331-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-4" tabindex="-1"></a>    <span class="cf">for</span> (maxit <span class="cf">in</span> maxit_grid) {</span>
+<span id="cb331-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-5" tabindex="-1"></a>      <span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb331-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-6" tabindex="-1"></a>      fit <span class="ot">&lt;-</span> <span class="fu">jordan</span>(MED_inputs[train, ], MED_outputs[train], <span class="at">size =</span> size, <span class="at">learnFuncParams =</span> learnFuncParam, <span class="at">maxit =</span> maxit)</span>
+<span id="cb331-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-7" tabindex="-1"></a>      predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, MED_inputs[<span class="sc">-</span>train, ])</span>
+<span id="cb331-8"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-8" tabindex="-1"></a>      rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((MED_outputs[<span class="sc">-</span>train] <span class="sc">-</span> predictions)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb331-9"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-9" tabindex="-1"></a></span>
+<span id="cb331-10"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-10" tabindex="-1"></a>      <span class="cf">if</span> (rmse <span class="sc">&lt;</span> best_rmse) {</span>
+<span id="cb331-11"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-11" tabindex="-1"></a>        best_rmse <span class="ot">&lt;-</span> rmse</span>
+<span id="cb331-12"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-12" tabindex="-1"></a>        best_params <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">learnFuncParams =</span> learnFuncParam, <span class="at">size =</span> size, <span class="at">maxit =</span> maxit)</span>
+<span id="cb331-13"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-13" tabindex="-1"></a>      }</span>
+<span id="cb331-14"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-14" tabindex="-1"></a>    }</span>
+<span id="cb331-15"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-15" tabindex="-1"></a>  }</span>
+<span id="cb331-16"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-16" tabindex="-1"></a>}</span>
+<span id="cb331-17"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-17" tabindex="-1"></a></span>
+<span id="cb331-18"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-18" tabindex="-1"></a><span class="co"># Mejores parámetros Jordan Medellín</span></span>
+<span id="cb331-19"><a href="redes-neuronales-en-series-de-tiempo.html#cb331-19" tabindex="-1"></a><span class="fu">print</span>(best_params)</span></code></pre></div>
+<pre><code>## $learnFuncParams
+## [1] 0.05
+## 
+## $size
+## [1] 100
+## 
+## $maxit
+## [1] 50000</code></pre>
+<div class="sourceCode" id="cb333"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb333-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb333-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Mejor RMSE:&quot;</span>, best_rmse))</span></code></pre></div>
+<pre><code>## [1] &quot;Mejor RMSE: 0.529416657478955&quot;</code></pre>
+<p>Se encontró que el mejor modelo de red Jordan se obtiene con los parámetros que indican una tasa de aprendizaje de 0.05, un número de iteraciones máxima de 50000 y un 100 capas ocultas, con un RMSE de aproximadamente 0.529 con esta combinación. Es importante notar que el modelo de Elman presento un RMSE menor, por lo cual esta metodología presentó mejores resultados frente al caso Jordan.</p>
+<div class="sourceCode" id="cb335"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb335-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb335-1" tabindex="-1"></a><span class="co">#Verificación parámetros</span></span>
+<span id="cb335-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb335-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;size = &quot;</span>, best_params<span class="sc">$</span>size, <span class="st">&quot;learnFuncParams = &quot;</span>, best_params<span class="sc">$</span>learnFuncParams, <span class="st">&quot;maxit = &quot;</span>, best_params<span class="sc">$</span>maxit))</span></code></pre></div>
+<pre><code>## [1] &quot;size =  100 learnFuncParams =  0.05 maxit =  50000&quot;</code></pre>
+<p>Con la función <code>plotIterativeError</code> nuevamente como se hizo con el modelo previo podemos ver cómo ha evolucionado el error de red a lo largo de las iteraciones de entrenamiento, donde ser observa que el error converge a cero rápidamente.</p>
+<div class="sourceCode" id="cb337"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb337-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb337-1" tabindex="-1"></a><span class="co"># Entrenamiento mejores parámetros Jordan Medellín</span></span>
+<span id="cb337-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb337-2" tabindex="-1"></a>MED_fit_jordan <span class="ot">&lt;-</span> <span class="fu">jordan</span>(MED_inputs[train, ], MED_outputs[train], <span class="at">size =</span> best_params<span class="sc">$</span>size, <span class="at">learnFuncParams =</span> best_params<span class="sc">$</span>learnFuncParams, <span class="at">maxit =</span> best_params<span class="sc">$</span>maxit)</span>
+<span id="cb337-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb337-3" tabindex="-1"></a><span class="fu">plotIterativeError</span>(MED_fit_jordan, </span>
+<span id="cb337-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb337-4" tabindex="-1"></a>                   <span class="at">main =</span> <span class="st">&quot;Error iterativo Jordan Medellín&quot;</span>,</span>
+<span id="cb337-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb337-5" tabindex="-1"></a>                   <span class="at">col=</span><span class="st">&quot;lightgreen&quot;</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-131-1.png" width="672" /></p>
+<p>En el gráfico siguiente se observa como es el ajuste del modelo de Jordan (color rojo), observando que sigue la tendencia y comportamiento de la serie original, aunque es notorio que se presentan picos más pronunciados que no se evidenciaron con las redes Elman.</p>
+<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb338-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb338-1" tabindex="-1"></a><span class="co"># Predicción test Jordan Medellín</span></span>
+<span id="cb338-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb338-2" tabindex="-1"></a><span class="fu">plot</span>(MED_y_test, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
+<span id="cb338-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb338-3" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Predicción Prueba / Test Jordan Medellín&quot;</span>,</span>
+<span id="cb338-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb338-4" tabindex="-1"></a>     <span class="at">col=</span><span class="st">&quot;lightgreen&quot;</span>)</span>
+<span id="cb338-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb338-5" tabindex="-1"></a>MED_pred_jordan <span class="ot">&lt;-</span> <span class="fu">predict</span>(MED_fit_jordan, MED_inputs[<span class="sc">-</span>test])</span>
+<span id="cb338-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb338-6" tabindex="-1"></a><span class="fu">lines</span>(MED_pred_jordan, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb338-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb338-7" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;Real&quot;</span>, <span class="st">&quot;Predicción&quot;</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;lightgreen&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-132-1.png" width="672" /></p>
+<p>A continuación, se ejecuta el modelo de predicción para realizar una visualización de como sería el comportamiento de la temperatura máxima posterior a las fechas de referencia que se están usando, y observar si parece mantener la tendencia general de los datos históricos. En este caso la predicción o el forecasting se gráfica nuevamente de color rojo, observándose predicciones dentro del rango de la serie original, incluso con un mínimo como los que se encuentran en los registros originales.</p>
+<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb339-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb339-1" tabindex="-1"></a><span class="co"># Predicción train Jordan Medellín</span></span>
+<span id="cb339-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb339-2" tabindex="-1"></a>MED_predictions_jordan <span class="ot">&lt;-</span> <span class="fu">predict</span>(MED_fit_jordan, MED_inputs[<span class="sc">-</span>train])</span>
+<span id="cb339-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb339-3" tabindex="-1"></a>MED_forecasting_jordan <span class="ot">&lt;-</span> MED_predictions_jordan <span class="sc">*</span> (<span class="fu">max</span>(MED_Z) <span class="sc">-</span> <span class="fu">min</span>(MED_Z)) <span class="sc">+</span> <span class="fu">min</span>(MED_Z)</span>
+<span id="cb339-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb339-4" tabindex="-1"></a></span>
+<span id="cb339-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb339-5" tabindex="-1"></a>MED_x_jordan <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>(len_total <span class="sc">+</span> <span class="fu">length</span>(MED_forecasting_jordan))</span>
+<span id="cb339-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb339-6" tabindex="-1"></a>MED_y_jordan <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">as.vector</span>(MED_Z), MED_forecasting_jordan)</span>
+<span id="cb339-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb339-7" tabindex="-1"></a></span>
+<span id="cb339-8"><a href="redes-neuronales-en-series-de-tiempo.html#cb339-8" tabindex="-1"></a><span class="fu">plot</span>(MED_x_jordan[<span class="dv">1</span><span class="sc">:</span>len_total], MED_y_jordan[<span class="dv">1</span><span class="sc">:</span>len_total], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
+<span id="cb339-9"><a href="redes-neuronales-en-series-de-tiempo.html#cb339-9" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Forecasting Jordan Temperatura Medellín&quot;</span>, </span>
+<span id="cb339-10"><a href="redes-neuronales-en-series-de-tiempo.html#cb339-10" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Tiempo / Día&quot;</span>,</span>
+<span id="cb339-11"><a href="redes-neuronales-en-series-de-tiempo.html#cb339-11" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">&quot;Temperatura [ºC]&quot;</span>,</span>
+<span id="cb339-12"><a href="redes-neuronales-en-series-de-tiempo.html#cb339-12" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">&quot;lightgreen&quot;</span>)</span>
+<span id="cb339-13"><a href="redes-neuronales-en-series-de-tiempo.html#cb339-13" tabindex="-1"></a><span class="fu">lines</span>(MED_x_jordan[(len_total)<span class="sc">:</span><span class="fu">length</span>(MED_x_jordan)], MED_y_jordan[(len_total)<span class="sc">:</span><span class="fu">length</span>(MED_x_jordan)], <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb339-14"><a href="redes-neuronales-en-series-de-tiempo.html#cb339-14" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;Real&quot;</span>, <span class="st">&quot;Predicción&quot;</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;lightgreen&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-133-1.png" width="672" /></p>
+</div>
+<div id="jordan-valledupar" class="section level3 hasAnchor" number="7.3.2">
+<h3><span class="header-section-number">7.3.2</span> Jordan Valledupar<a href="redes-neuronales-en-series-de-tiempo.html#jordan-valledupar" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Como se ha realizado anteriormente, se aplica ahora para Valledupar el <em>grid search</em> para obtener los mejores parámetros del modelo Jordan.</p>
+<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb340-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-1" tabindex="-1"></a><span class="co"># Grid search Jordan Valledupar</span></span>
+<span id="cb340-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-2" tabindex="-1"></a><span class="cf">for</span> (learnFuncParam <span class="cf">in</span> learnFuncParams_grid) {</span>
+<span id="cb340-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-3" tabindex="-1"></a>  <span class="cf">for</span> (size <span class="cf">in</span> size_grid) {</span>
+<span id="cb340-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-4" tabindex="-1"></a>    <span class="cf">for</span> (maxit <span class="cf">in</span> maxit_grid) {</span>
+<span id="cb340-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-5" tabindex="-1"></a>      <span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb340-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-6" tabindex="-1"></a>      fit <span class="ot">&lt;-</span> <span class="fu">jordan</span>(VUP_inputs[train, ], VUP_outputs[train], <span class="at">size =</span> size, <span class="at">learnFuncParams =</span> learnFuncParam, <span class="at">maxit =</span> maxit)</span>
+<span id="cb340-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-7" tabindex="-1"></a>      predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, VUP_inputs[<span class="sc">-</span>train, ])</span>
+<span id="cb340-8"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-8" tabindex="-1"></a>      rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((VUP_outputs[<span class="sc">-</span>train] <span class="sc">-</span> predictions)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb340-9"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-9" tabindex="-1"></a></span>
+<span id="cb340-10"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-10" tabindex="-1"></a>      <span class="cf">if</span> (rmse <span class="sc">&lt;</span> best_rmse) {</span>
+<span id="cb340-11"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-11" tabindex="-1"></a>        best_rmse <span class="ot">&lt;-</span> rmse</span>
+<span id="cb340-12"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-12" tabindex="-1"></a>        best_params <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">learnFuncParams =</span> learnFuncParam, <span class="at">size =</span> size, <span class="at">maxit =</span> maxit)</span>
+<span id="cb340-13"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-13" tabindex="-1"></a>      }</span>
+<span id="cb340-14"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-14" tabindex="-1"></a>    }</span>
+<span id="cb340-15"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-15" tabindex="-1"></a>  }</span>
+<span id="cb340-16"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-16" tabindex="-1"></a>}</span>
+<span id="cb340-17"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-17" tabindex="-1"></a></span>
+<span id="cb340-18"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-18" tabindex="-1"></a><span class="co"># Mejores parámetros Jordan Valledupar</span></span>
+<span id="cb340-19"><a href="redes-neuronales-en-series-de-tiempo.html#cb340-19" tabindex="-1"></a><span class="fu">print</span>(best_params)</span></code></pre></div>
+<pre><code>## $learnFuncParams
+## [1] 0.01
+## 
+## $size
+## [1] 50
+## 
+## $maxit
+## [1] 1e+05</code></pre>
+<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb342-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb342-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Mejor RMSE:&quot;</span>, best_rmse))</span></code></pre></div>
+<pre><code>## [1] &quot;Mejor RMSE: 0.309209461706702&quot;</code></pre>
+<p>Se encontró que el mejor modelo de red Jordan se obtiene con los parámetros que indican una tasa de aprendizaje de 0.01, un número de iteraciones máxima de 100000 y un 50 capas ocultas, con un RMSE de aproximadamente 0.309 con esta combinación. Es importante notar que el modelo de Elman presento un RMSE menor, por lo cual esta metodología presentó mejores resultados frente al caso Jordan.</p>
+<p>Con la función <code>plotIterativeError</code> nuevamente como se hizo con el modelo previo podemos ver cómo evoluciona el error de red a lo largo de las iteraciones de entrenamiento, donde ser observa que el error converge a cero rápidamente.</p>
+<div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb344-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb344-1" tabindex="-1"></a><span class="co"># Entranamiento mejores parámetros Jordan Valledupar</span></span>
+<span id="cb344-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb344-2" tabindex="-1"></a>VUP_fit_jordan <span class="ot">&lt;-</span> <span class="fu">jordan</span>(VUP_inputs[train, ], VUP_outputs[train], <span class="at">size =</span> best_params<span class="sc">$</span>size, <span class="at">learnFuncParams =</span> best_params<span class="sc">$</span>learnFuncParams, <span class="at">maxit =</span> best_params<span class="sc">$</span>maxit)</span>
+<span id="cb344-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb344-3" tabindex="-1"></a><span class="fu">plotIterativeError</span>(VUP_fit_jordan, </span>
+<span id="cb344-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb344-4" tabindex="-1"></a>                   <span class="at">main =</span> <span class="st">&quot;Error iterativo Jordan Valledupar&quot;</span>,</span>
+<span id="cb344-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb344-5" tabindex="-1"></a>                   <span class="at">col=</span><span class="st">&quot;orange&quot;</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-135-1.png" width="672" /></p>
+<p>En el gráfico siguiente se observa en rojo la predicción para los datos de prueba / test del modelo Jordan, es notorio que el pronóstico no refleja bien la tendencia y de hecho se presentan vacíos o huecos respecto a los registros reales de Valledupar (en naranja).</p>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb345-1" tabindex="-1"></a><span class="co"># Predicción test Jordan Valledupar</span></span>
+<span id="cb345-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb345-2" tabindex="-1"></a><span class="fu">plot</span>(VUP_y_test, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
+<span id="cb345-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb345-3" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Predicción Prueba / Test Jordan Valledupar&quot;</span>,</span>
+<span id="cb345-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb345-4" tabindex="-1"></a>     <span class="at">col=</span><span class="st">&quot;orange&quot;</span>)</span>
+<span id="cb345-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb345-5" tabindex="-1"></a>VUP_pred_jordan <span class="ot">&lt;-</span> <span class="fu">predict</span>(VUP_fit_jordan, VUP_inputs[<span class="sc">-</span>test])</span>
+<span id="cb345-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb345-6" tabindex="-1"></a><span class="fu">lines</span>(VUP_pred_jordan, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb345-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb345-7" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;Real&quot;</span>, <span class="st">&quot;Predicción&quot;</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;orange&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-136-1.png" width="672" /></p>
+<p>Independiente de lo anterior, se generan el pronóstico para Valledupar, como en los numerales anteriores, la predicción se encuentra en color rojo y el comportamiento se encuentra dentro del rango de los datos reales.</p>
+<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb346-1"><a href="redes-neuronales-en-series-de-tiempo.html#cb346-1" tabindex="-1"></a><span class="co"># Predicción train Jordan Valledupar</span></span>
+<span id="cb346-2"><a href="redes-neuronales-en-series-de-tiempo.html#cb346-2" tabindex="-1"></a>VUP_predictions_jordan <span class="ot">&lt;-</span> <span class="fu">predict</span>(VUP_fit_jordan, VUP_inputs[<span class="sc">-</span>train])</span>
+<span id="cb346-3"><a href="redes-neuronales-en-series-de-tiempo.html#cb346-3" tabindex="-1"></a>VUP_forecasting_jordan <span class="ot">&lt;-</span> VUP_predictions_jordan <span class="sc">*</span> (<span class="fu">max</span>(VUP_Z) <span class="sc">-</span> <span class="fu">min</span>(VUP_Z)) <span class="sc">+</span> <span class="fu">min</span>(VUP_Z)</span>
+<span id="cb346-4"><a href="redes-neuronales-en-series-de-tiempo.html#cb346-4" tabindex="-1"></a></span>
+<span id="cb346-5"><a href="redes-neuronales-en-series-de-tiempo.html#cb346-5" tabindex="-1"></a>VUP_x_jordan <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>(len_total <span class="sc">+</span> <span class="fu">length</span>(VUP_forecasting_jordan))</span>
+<span id="cb346-6"><a href="redes-neuronales-en-series-de-tiempo.html#cb346-6" tabindex="-1"></a>VUP_y_jordan <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">as.vector</span>(VUP_Z), VUP_forecasting_jordan)</span>
+<span id="cb346-7"><a href="redes-neuronales-en-series-de-tiempo.html#cb346-7" tabindex="-1"></a></span>
+<span id="cb346-8"><a href="redes-neuronales-en-series-de-tiempo.html#cb346-8" tabindex="-1"></a><span class="fu">plot</span>(VUP_x_jordan[<span class="dv">1</span><span class="sc">:</span>len_total], VUP_y_jordan[<span class="dv">1</span><span class="sc">:</span>len_total], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
+<span id="cb346-9"><a href="redes-neuronales-en-series-de-tiempo.html#cb346-9" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Forecasting Jordan Temperatura Valledupar&quot;</span>, </span>
+<span id="cb346-10"><a href="redes-neuronales-en-series-de-tiempo.html#cb346-10" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Tiempo / Día&quot;</span>,</span>
+<span id="cb346-11"><a href="redes-neuronales-en-series-de-tiempo.html#cb346-11" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">&quot;Temperatura [ºC]&quot;</span>,</span>
+<span id="cb346-12"><a href="redes-neuronales-en-series-de-tiempo.html#cb346-12" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>)</span>
+<span id="cb346-13"><a href="redes-neuronales-en-series-de-tiempo.html#cb346-13" tabindex="-1"></a><span class="fu">lines</span>(VUP_x_jordan[(len_total)<span class="sc">:</span><span class="fu">length</span>(VUP_x_jordan)], VUP_y_jordan[(len_total)<span class="sc">:</span><span class="fu">length</span>(VUP_x_jordan)], <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb346-14"><a href="redes-neuronales-en-series-de-tiempo.html#cb346-14" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;Real&quot;</span>, <span class="st">&quot;Predicción&quot;</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;orange&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="SeriesTiempo-RFCS_files/figure-html/unnamed-chunk-137-1.png" width="672" /></p>
+</div>
+</div>
+<div id="observaciones-finales-redes-neuronales" class="section level2 hasAnchor" number="7.4">
+<h2><span class="header-section-number">7.4</span> Observaciones finales redes neuronales<a href="redes-neuronales-en-series-de-tiempo.html#observaciones-finales-redes-neuronales" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>De todos los métodos / modelos aplicados a las series de tiempo meteorológicas estudiadas, las redes neuronales recurrentes son las que han captado mejor el comportamiento de los registros de temperatura; aunque como se ha mencionado con un alto costo computacional (corridas de varias horas respecto a los segundos o minutos de todos los modelos de los capítulos anteriores). Por lo tanto, es importante analizar o la arquitectura necesaria y su costo para generar predicciones continuas si se requieren los pronósticos de manera continua.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="regresión-en-series-de-tiempo.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="referencias.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

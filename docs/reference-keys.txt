@@ -42,3 +42,14 @@ modelos-y-predicción-arima-ets-y-prophet
 comparación-de-modelos
 comparación-modelos-de-regresión-series-medellín
 comparación-modelos-de-regresión-series-valledupar
+redes-neuronales-en-series-de-tiempo
+conjunto-de-datos-de-prueba-y-entrenamiento
+normalización-datos
+datos-de-prueba-y-entrenamiento
+modelo-y-predicción-modelo-elman
+elman-medellín
+elman-valledupar
+modelo-y-predicción-jordan
+jordan-medellín
+jordan-valledupar
+observaciones-finales-redes-neuronales
